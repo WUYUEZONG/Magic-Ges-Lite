@@ -18,6 +18,10 @@ extension NSPoint {
     }
 }
 
+extension Notification.Name {
+    static let getWindowInfo = Notification.Name("com.wyz.ges.lite.getWindowInfo")
+}
+
 class ViewController: NSViewController {
     
     @IBOutlet weak var actionLabel: NSTextField!
@@ -36,10 +40,28 @@ class ViewController: NSViewController {
         
         windows = WindowUtil.getWindowList()
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//            let dic = NSDictionary(object: kCFBooleanTrue, forKey: kAXTrustedCheckOptionPrompt.takeRetainedValue()
+            if AXIsProcessTrusted() {
+//                self.accessibilityWindowController?.close()
+//                self.accessibilityWindowController = nil
+//                completion()
+                debugPrint("已经拥有权限")
+                self.actionLabel.stringValue = "已经拥有权限"
+            } else {
+                self.actionLabel.stringValue = "没有拥有权限"
+            }
+        }
+        
+//        NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { [self] event in
+////            doMouseMoved(event: event)
+//            return NSEvent()
+//        }
+        
         
         NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .mouseEntered, .scrollWheel]) { [self] event in
 //            debugPrint(event.window?.contentView.debugDescription)
-            
+
             switch event.type {
             case .mouseMoved:
                 doMouseMoved(event: event)
@@ -52,10 +74,24 @@ class ViewController: NSViewController {
                 break
             default: break
             }
-            
+
         }
 
         // Do any additional setup after loading the view.
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleInfo(noti:)), name: .getWindowInfo, object: nil)
+    }
+    
+    @objc
+    func handleInfo(noti: Notification) {
+        
+        if let c = currenWindow {
+            let element = AXUIElementCreateApplication(c.pid)
+            let arrs = UnsafeMutablePointer<CFArray?>.allocate(capacity: 1)
+            AXUIElementCopyAttributeNames(element, arrs)
+            debugPrint(arrs.pointee ?? "nothing")
+        }
+        
     }
 
     override var representedObject: Any? {
@@ -97,7 +133,7 @@ class ViewController: NSViewController {
             }
 
         } else {
-            debugPrint("没有相应的程序\(event.windowNumber)")
+            self.actionLabel.stringValue = "没有相应的程序\(event.windowNumber)"
         }
 
     }
@@ -123,7 +159,8 @@ class ViewController: NSViewController {
             } right: { e in
                 
             } down: { e in
-                
+//                NotificationCenter.default.post(Notification(name: .getWindowInfo, object: nil))
+                self.theOwnerOfMenuBar()
             }
 
             
@@ -139,24 +176,8 @@ class ViewController: NSViewController {
                 
             } down: { e in
                 
-                if let app = NSWorkspace.shared.menuBarOwningApplication {
-                    let element = AXUIElementCreateApplication(app.processIdentifier)
-                    let header = NSAccessibility.Attribute.header as CFString
-                    var value: AnyObject?
-                    var names: CFArray?
-                    let nameError = AXUIElementCopyAttributeNames(element, &names)
-                    debugPrint(names.debugDescription, nameError.rawValue)
-                    let valueError = AXUIElementCopyAttributeValue(element, NSAccessibility.Attribute.header as CFString, &value)
-                    debugPrint(value.debugDescription, valueError.rawValue)
-//                    AXValueType(rawValue: <#T##UInt32#>)
-//                    AXValueCreate(., <#T##valuePtr: UnsafeRawPointer##UnsafeRawPointer#>)
-//                    AXValueGetType(value)
-//                    AXValueGetValue(<#T##value: AXValue##AXValue#>, <#T##theType: AXValueType##AXValueType#>, <#T##valuePtr: UnsafeMutableRawPointer##UnsafeMutableRawPointer#>)
-//                    AXValueCreate(AXValueType(rawValue: 0), &value)
-//                    AXValueCreate(kvk, <#T##valuePtr: UnsafeRawPointer##UnsafeRawPointer#>)
-//                    AXUIElementSetAttributeValue(element, header, true as CFBoolean)
-                }
-                
+                self.theOwnerOfMenuBar()
+//                self.resizeWindow(Any.self)
                 
 //                if e.modifierFlags.contains(.control) {
 //                    clickKeyboard(virtualKey: kVK_DownArrow)
@@ -306,8 +327,67 @@ class ViewController: NSViewController {
 
     
     @IBAction func resizeWindow(_ sender: Any) {
-        setFrontMostAppSize()
+        theOwnerOfMenuBar()
     }
+    
+    func theOwnerOfMenuBar() {
+        
+        guard let app = NSWorkspace.shared.menuBarOwningApplication else {
+            self.actionLabel.stringValue = "menuBarOwningApplication error"
+            return
+        }
+        
+        let element = AXUIElementCreateApplication(app.processIdentifier)
+        
+        printAttributeNames(element)
+        
+        guard let elements = getAttribute(.windows, element: element) else {
+            return
+        }
+        
+        
+        
+        if let lists = elements as? Array<AXUIElement>, let first = lists.first {
+            setAttribute(NSAccessibility.Attribute.minimized, element: first, value: true as CFBoolean)
+            //                setAttribute(NSAccessibility.Attribute(rawValue: "AXFullScreen"), element: first, value: true as CFBoolean)
+            //                setAttribute(NSAccessibility.Attribute(rawValue: "AXMinimized"), element: first, value: true as CFBoolean)
+            printAttributeNames(first)
+        }
+            
+        
+    }
+    
+    func printAttributeNames(_ ele: AXUIElement) {
+        let arrs = UnsafeMutablePointer<CFArray?>.allocate(capacity: 1)
+        let namesError = AXUIElementCopyAttributeNames(ele, arrs)
+        guard namesError == .success else {
+            self.actionLabel.stringValue = "ele error \(namesError.rawValue)"
+            return
+        }
+        if let p = arrs.pointee {
+            debugPrint(p)
+        }
+    }
+    
+    @discardableResult
+    func getAttribute(_ attribute: NSAccessibility.Attribute, element: AXUIElement) -> AnyObject? {
+        var copyedValue: AnyObject?
+        let att = attribute as CFString
+        let frontMostError = AXUIElementCopyAttributeValue(element, att, &copyedValue)
+        if let _ = copyedValue {
+            self.actionLabel.stringValue = "\(frontMostError.rawValue)"
+        }
+        return copyedValue
+    }
+    
+    func setAttribute(_ attribute: NSAccessibility.Attribute, element: AXUIElement, value: AnyObject) {
+//        getAttribute(attribute, element: element)
+        let att = attribute as CFString
+        let setError = AXUIElementSetAttributeValue(element, att, value)
+        self.actionLabel.stringValue = "----\(setError.rawValue)"
+    }
+    
+    
     
 }
 

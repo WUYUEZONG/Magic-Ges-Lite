@@ -743,5 +743,134 @@
             </objects>
             <point key="canvasLocation" x="75" y="655"/>
         </scene>
+        <!--Accessibility View Controller-->
+        <scene sceneID="EVb-67-WQo">
+            <objects>
+                <viewController id="MV4-jC-Lfq" customClass="AccessibilityViewController" customModule="Magic_Ges_Lite" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="x5v-Gl-AVd">
+                        <rect key="frame" x="0.0" y="0.0" width="290" height="314"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="22" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="he3-xn-dov">
+                                <rect key="frame" x="20" y="20" width="250" height="264"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="uB8-Pg-RQA">
+                                        <rect key="frame" x="27" y="238" width="196" height="26"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Authorize Rectangle" id="Yfi-Lr-kuF">
+                                            <font key="font" metaFont="system" size="22"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="ADN-VG-kPj">
+                                        <rect key="frame" x="-2" y="184" width="254" height="32"/>
+                                        <textFieldCell key="cell" alignment="center" title="Rectangle needs your permission to control your window positions." id="8fL-BO-1pS">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="SF2-1Y-O2z">
+                                        <rect key="frame" x="-2" y="134" width="254" height="28"/>
+                                        <textFieldCell key="cell" alignment="center" title="Go to System Preferences → Security &amp; Privacy → Privacy → Accessibility" id="uqd-Ew-sax">
+                                            <font key="font" metaFont="message" size="11"/>
+                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fJA-SO-XGF">
+                                        <rect key="frame" x="33" y="88" width="184" height="27"/>
+                                        <buttonCell key="cell" type="bevel" title="Open System Preferences" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="E1z-Vh-Vye">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="openSystemPrefs:" target="MV4-jC-Lfq" id="H85-uW-G8Q"/>
+                                        </connections>
+                                    </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D0M-Dw-xUy">
+                                        <rect key="frame" x="57" y="54" width="136" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Enable Rectangle.app" id="lni-MU-Zuv">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="BNC-SJ-ppg">
+                                        <rect key="frame" x="-2" y="0.0" width="254" height="32"/>
+                                        <textFieldCell key="cell" alignment="center" title="If the checkbox is disabled, click the padlock and enter your password" id="EhP-ze-heZ">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="750" constant="250" id="17S-nA-Ed3"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="250" id="mgK-za-GBx"/>
+                                </constraints>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="he3-xn-dov" secondAttribute="bottom" constant="20" symbolic="YES" id="UEY-98-4ZM"/>
+                            <constraint firstItem="he3-xn-dov" firstAttribute="top" secondItem="x5v-Gl-AVd" secondAttribute="top" constant="30" id="ak8-Hf-Kie"/>
+                            <constraint firstAttribute="trailing" secondItem="he3-xn-dov" secondAttribute="trailing" constant="20" symbolic="YES" id="eeh-CH-8TX"/>
+                            <constraint firstItem="he3-xn-dov" firstAttribute="leading" secondItem="x5v-Gl-AVd" secondAttribute="leading" constant="20" symbolic="YES" id="p8M-Mz-0H7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="openSysPrefsButton" destination="fJA-SO-XGF" id="opA-sc-pfX"/>
+                        <outlet property="padlockField" destination="BNC-SJ-ppg" id="Gjc-Dn-Wwy"/>
+                        <outlet property="sysPrefsPathField" destination="SF2-1Y-O2z" id="5g9-Ll-mD4"/>
+                    </connections>
+                </viewController>
+                <customObject id="Yl4-En-Ygj" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="662" y="732"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="eaz-7s-iek">
+            <objects>
+                <windowController storyboardIdentifier="AccessibilityWindowController" id="I5c-LG-YKc" customClass="AccessibilityWindowController" customModule="Magic_Ges_Lite" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Authorize Rectangle" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="8vQ-HH-hPo">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" fullSizeContentView="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="245" y="301" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+                        <view key="contentView" id="GwX-fO-Ll0">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="I5c-LG-YKc" id="PLR-ue-xE9"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="MV4-jC-Lfq" kind="relationship" relationship="window.shadowedContentViewController" id="Kip-06-qy4"/>
+                    </connections>
+                </windowController>
+                <customObject id="k1V-Ek-MQI" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="656" y="251"/>
+        </scene>
     </scenes>
 </document>
