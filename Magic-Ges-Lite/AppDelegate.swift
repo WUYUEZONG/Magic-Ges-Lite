@@ -16,13 +16,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
-        let alreadyTrusted = accessibilityAuthorization.checkAccessibility {
-            
-//            self.checkForConflictingApps()
-//            self.openPreferences(self)
-//            self.statusItem.statusMenu = self.mainStatusMenu
-//            self.accessibilityTrusted()
-        }
+//        let _ = accessibilityAuthorization.checkAccessibility {
+//
+//        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

@@ -160,6 +160,10 @@ class AccessibilityElement {
         wrappedElement.getPid()
     }
     
+    var element: AXUIElement {
+        wrappedElement
+    }
+    
     private var windowElement: AccessibilityElement? {
         if isWindow == true { return self }
         return getElementValue(.window)

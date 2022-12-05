@@ -10,11 +10,11 @@ import CoreGraphics
 import Carbon.HIToolbox
 
 extension NSPoint {
-    func toCGPoint() -> CGPoint {
+    func toCGPoint() -> NSPoint {
         if let main = NSScreen.main {
-            return CGPointMake(self.x, main.frame.height - self.y)
+            return NSPoint(x: x, y: main.frame.height - y)
         }
-        return CGPointMake(self.x, 1080 - self.y)
+        return NSPoint(x: self.x, y: 1080 - self.y)
     }
 }
 
@@ -31,18 +31,25 @@ class ViewController: NSViewController {
     
     var menuBarScrollWhellEventY: NSEvent?
     
-    var windows: Set<WindowInfo>!
+//    var windows: Set<WindowInfo>!
     
     var currenWindow: WindowInfo?
+    
+    var currentWindowNumber = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        windows = WindowUtil.getWindowList()
+//        windows = WindowUtil.getWindowList()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//            let dic = NSDictionary(object: kCFBooleanTrue, forKey: kAXTrustedCheckOptionPrompt.takeRetainedValue()
+//            let dic = NSDictionary(object: kCFBooleanTrue, forKey: kAXTrustedCheckOptionPrompt.takeUnretainedValue() as! NSCopying)
+//            if AXIsProcessTrustedWithOptions(dic as CFDictionary) {
+
             if AXIsProcessTrusted() {
+                
+//                NSApp.setActivationPolicy(.accessory)
+
 //                self.accessibilityWindowController?.close()
 //                self.accessibilityWindowController = nil
 //                completion()
@@ -59,16 +66,23 @@ class ViewController: NSViewController {
 //        }
         
         
-        NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .mouseEntered, .scrollWheel]) { [self] event in
+        NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .mouseExited, .scrollWheel]) { [self] event in
 //            debugPrint(event.window?.contentView.debugDescription)
 
             switch event.type {
             case .mouseMoved:
+            
                 doMouseMoved(event: event)
                 break
-            case .mouseEntered:
-                doMouseEntered(event: event)
+                
+            case .mouseExited:
+                doMouseExited(event: event)
                 break
+            
+                
+//            case .mouseEntered:
+//                doMouseEntered(event: event)
+//                break
             case .scrollWheel:
                 doScrollWheel(event: event)
                 break
@@ -79,7 +93,7 @@ class ViewController: NSViewController {
 
         // Do any additional setup after loading the view.
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleInfo(noti:)), name: .getWindowInfo, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleInfo(noti:)), name: .getWindowInfo, object: nil)
     }
     
     @objc
@@ -100,93 +114,112 @@ class ViewController: NSViewController {
         }
     }
     
-    override func mouseMoved(with event: NSEvent) {
-        super.mouseMoved(with: event)
-        debugPrint(event.debugDescription)
-    }
-    
-    override func mouseEntered(with event: NSEvent) {
-        super.mouseEntered(with: event)
-        self.actionLabel.stringValue = "鼠标进来了"
+    func doMouseExited(event: NSEvent) {
+        debugPrint("doMouseExited \(event.windowNumber)")
     }
     
     func doMouseMoved(event: NSEvent) {
         
-//        for app in NSWorkspace.shared.runningApplications {
-//
+//        guard event.windowNumber != currentWindowNumber else {
+//            return
 //        }
-        currenWindow = nil
-        let current = windows.first { winfo in
-            return winfo.id == event.windowNumber
-        }
-        if let current = current {
-            let localPoint = event.locationInWindow.toCGPoint()
-            if current.frame.contains(localPoint) {
-                if (localPoint.y - current.frame.origin.y) < 38 {
-//                    debugPrint("好像在程序\(event.windowNumber)的标题栏")
-                    currenWindow = current
-                } else {
-//                    debugPrint("程序\(event.windowNumber)的非标题栏")
-                }
-            } else {
-//                debugPrint("不再程序\(event.windowNumber)内")
-            }
-
-        } else {
-            self.actionLabel.stringValue = "没有相应的程序\(event.windowNumber)"
-        }
+//        debugPrint("moved -- ",event.windowNumber)
+//        currentWindowNumber = event.windowNumber
+//
+//        currenWindow = nil
+//        let localPoint = event.locationInWindow.toCGPoint()
+//
+//        var current: WindowInfo? = WindowUtil.getWindowList().first { a in
+//            return a.frame.contains(localPoint)
+//        }
+//
+//        if let current = current {
+//            if (localPoint.y - current.frame.origin.y) < 38 {
+//                debugPrint("好像在程序\(event.windowNumber)的标题栏")
+//                currenWindow = current
+//            } else {
+//                debugPrint("程序\(event.windowNumber)的非标题栏")
+//            }
+//
+//        } else {
+//            self.actionLabel.stringValue = "没有相应的程序\(event.windowNumber)"
+//        }
 
     }
     
-    func doMouseEntered(event: NSEvent) {
-        debugPrint(#function, "\(event)")
-//        switch event.phase {
-//        case .ended:
-//            debugPrint(#function, "\(event)")
-//            break
-//        default: break
-//        }
+    func getScrollWheelEventUnderMouseElement(event: NSEvent) -> AccessibilityElement? {
+        let etmloc = NSEvent.mouseLocation
+        
+        let smain = NSScreen.main!
+        let statusY = smain.visibleFrame.minY + smain.visibleFrame.height;
+        
+        var element: AXUIElement?
+        
+        if etmloc.y > statusY {
+            if let app = NSWorkspace.shared.menuBarOwningApplication {
+                element = AXUIElementCreateApplication(app.processIdentifier)
+            }
+        } else {
+            
+            let current: WindowInfo? = WindowUtil.getWindowList().first { a in
+                debugPrint("current evet \(event.windowNumber)")
+                return event.windowNumber == a.id && a.frame.contains(etmloc.toCGPoint())
+            }
+            
+            // 38 假定的应用导航栏高度
+            if let current = current, etmloc.toCGPoint().y - current.frame.minY < 38 {
+                element = AXUIElementCreateApplication(current.pid)
+            }
+        }
+        
+        
+        if let element = element {
+            return AccessibilityElement(element)
+        }
+        return nil
     }
+    
     
     func doScrollWheel(event: NSEvent) {
-        
-        if let _ = currenWindow {
-            
-            doScrollWhell(event: event) { e in
-                
-            } up: { e in
-                
-            } right: { e in
-                
-            } down: { e in
-//                NotificationCenter.default.post(Notification(name: .getWindowInfo, object: nil))
-                self.theOwnerOfMenuBar()
-            }
+        doScrollWhell(event: event) { e in
 
+        } up: { e in
+//                clickKeyboard(flagKey: kVK_Control, virtualKey: kVK_RightArrow)
+//            clickKeyboard(flags: .maskControl, virtualKey: kVK_UpArrow)
             
-            
-        } else if event.locationInWindow.y > 1055 {
-            
-//                debugPrint(event.debugDescription)
-            doScrollWhell(event: event) { e in
-                clickKeyboard(flagKey: kVK_Control, virtualKey: kVK_LeftArrow)
-            } up: { e in
-                clickKeyboard(flagKey: kVK_Control, virtualKey: kVK_RightArrow)
-            } right: { e in
+            if let ele = self.getScrollWheelEventUnderMouseElement(event: e) {
+//                UIElement
+//                var zoom = UnsafeMutablePointer<CFArray?>.allocate(capacity: 1)
                 
-            } down: { e in
-                
-                self.theOwnerOfMenuBar()
-//                self.resizeWindow(Any.self)
-                
-//                if e.modifierFlags.contains(.control) {
-//                    clickKeyboard(virtualKey: kVK_DownArrow)
-//                } else {
-//                    clickKeyboard(flags: .maskCommand, virtualKey: kVK_ANSI_M)
+//                let error = AXUIElementCopyActionNames(ele.element, zoom)
+//                let error = AXUIElementCopyParameterizedAttributeNames(AXUIElementCreateSystemWide(), zoom)
+//
+//                if error == .success {
+//                    debugPrint("zoom -- \(zoom.pointee!)")
 //                }
-            }
+//                NSAccessibility.OrientationValue.horizontal
+                
+                
+                let zoomId = UnsafeMutablePointer<CFTypeRef?>.allocate(capacity: 1)
+                AXUIElementCopyAttributeValue(ele.element, NSAccessibility.Attribute.zoomButton as CFString, zoomId)
+                if let zoomId = zoomId.pointee {
+                    debugPrint(zoomId.debugDescription)
+                }
+                
+//                self.setAttributeFor(element: ele.element, attribute: .zoomButton, value: NSAccessibility.Action.press as CFTypeRef)
+                
 
+            }
             
+        } right: { e in
+            
+        } down: { e in
+            
+            if let ele = self.getScrollWheelEventUnderMouseElement(event: e) {
+                self.setAttributeFor(element: ele.element, attribute: .minimized, value: true as CFBoolean)
+            }
+            
+
         }
     }
     
@@ -203,7 +236,6 @@ class ViewController: NSViewController {
                 let newX = abs(event.deltaX)
                 if newX > oldX {
                     menuBarScrollWhellEventX = event
-//                    debugPrint("new:\(newX) old:\(oldX) x changed = \(event.deltaX)")
                 }
             } else {
                 menuBarScrollWhellEventX = event
@@ -214,7 +246,6 @@ class ViewController: NSViewController {
                 let newY = abs(event.deltaY)
                 if newY > oldY {
                     menuBarScrollWhellEventY = event
-//                    debugPrint("new:\(newY) old:\(oldY) y changed = \(event.deltaY)")
                 }
             } else {
                 menuBarScrollWhellEventY = event
@@ -230,14 +261,14 @@ class ViewController: NSViewController {
                 // 水平操作
                 
                 if xEvent.deltaX < 0 {
-                    debugPrint("在菜单栏向左⬅️划动了")
+                    debugPrint("向左⬅️划动了")
                     if let left = left {
                         left(xEvent)
                     }
 //
 //                            clickKeyboard(flags: .maskControl, virtualKey: kVK_LeftArrow)
                 } else {
-                    debugPrint("在菜单栏向右➡️划动了")
+                    debugPrint("向右➡️划动了")
                     if let right = right {
                         right(xEvent)
                     }
@@ -247,13 +278,13 @@ class ViewController: NSViewController {
             } else {
                 if yEvent.deltaY < 0 {
                     // 向上， 放大操作
-                    debugPrint("在菜单栏向上⬆️划动了")
+                    debugPrint("向上⬆️划动了")
                     if let up = up {
                         up(yEvent)
                     }
                 } else {
-                    debugPrint("在菜单栏向下⬇️划动了 \(event.debugDescription)")
-                    actionLabel.stringValue = "在菜单栏向下⬇️划动了"
+                    debugPrint("向下⬇️划动了 \(event.debugDescription)")
+//                    actionLabel.stringValue = "在菜单栏向下⬇️划动了"
                     if let down = down {
                         down(yEvent)
                     }
@@ -272,101 +303,48 @@ class ViewController: NSViewController {
         
     }
     
-    func setFrontMostAppSize() {
-        
-        
-        
-        if let app = NSWorkspace.shared.frontmostApplication {
-            let axuiElement = AXUIElementCreateApplication(app.processIdentifier)
-            
-//            let element = AccessibilityElement(axuiElement)
-//            var newSize = CGSize(width: 1200, height: 700)
-//            var newPosition = CGPoint(x: 0, y: 100)
-//            element.setFrame(CGRect(origin: newPosition, size: newSize))
-        
-            let userInterface = NSAccessibility.Attribute(rawValue: "AXEnhancedUserInterface").rawValue as CFString
-            var copyedAttribute: AnyObject?
-            AXUIElementCopyAttributeValue(axuiElement, userInterface, &copyedAttribute)
-            if let enable = copyedAttribute as? Bool, enable {
-                AXUIElementSetAttributeValue(axuiElement, userInterface, false as CFBoolean)
-            }
-
-            var newSize = CGSize(width: 1200, height: 700)
-            if let value = AXValueCreate(.cgSize, &newSize) {
-
-                let sizeError = AXUIElementSetAttributeValue(axuiElement, NSAccessibility.Attribute.size.rawValue as CFString, value)
-                debugPrint(sizeError.rawValue)
-            } else {
-                debugPrint("尺寸失败")
-            }
-
-            var newPosition = CGPoint(x: 0, y: 100)
-            if let vp = AXValueCreate(.cgPoint, &newPosition) {
-                let pError = AXUIElementSetAttributeValue(axuiElement, NSAccessibility.Attribute.position.rawValue as CFString, vp)
-                debugPrint(pError.rawValue)
-            }
-
-
-            if let value = AXValueCreate(.cgSize, &newSize) {
-
-                let sizeError = AXUIElementSetAttributeValue(axuiElement, NSAccessibility.Attribute.size.rawValue as CFString, value)
-                debugPrint(sizeError.rawValue)
-            } else {
-                debugPrint("尺寸失败")
-            }
-//
-        } else {
-            debugPrint("获取激活的窗口失败")
-        }
-        
-        
-        
-        
-        
-    }
+    
 
     
     @IBAction func resizeWindow(_ sender: Any) {
-        theOwnerOfMenuBar()
+//        setOwnerOfMenuBarMinimized()
     }
     
-    func theOwnerOfMenuBar() {
-        
-        guard let app = NSWorkspace.shared.menuBarOwningApplication else {
-            self.actionLabel.stringValue = "menuBarOwningApplication error"
-            return
-        }
-        
-        let element = AXUIElementCreateApplication(app.processIdentifier)
-        
-        printAttributeNames(element)
+    
+    func setAttributeFor(element: AXUIElement, attribute: NSAccessibility.Attribute, value: AnyObject) {
         
         guard let elements = getAttribute(.windows, element: element) else {
             return
         }
         
-        
-        
-        if let lists = elements as? Array<AXUIElement>, let first = lists.first {
-            setAttribute(NSAccessibility.Attribute.minimized, element: first, value: true as CFBoolean)
-            //                setAttribute(NSAccessibility.Attribute(rawValue: "AXFullScreen"), element: first, value: true as CFBoolean)
-            //                setAttribute(NSAccessibility.Attribute(rawValue: "AXMinimized"), element: first, value: true as CFBoolean)
-            printAttributeNames(first)
+        guard let lists = elements as? Array<AXUIElement>, let first = lists.first else {
+            return
         }
+        
+        guard let names = printAttributeNames(first) else {
+            return
+        }
+        
+        if names.contains(attribute.rawValue) {
+            setAttribute(attribute, element: first, value: value)
             
+        }
         
     }
     
-    func printAttributeNames(_ ele: AXUIElement) {
+    func printAttributeNames(_ ele: AXUIElement) -> [String]? {
         let arrs = UnsafeMutablePointer<CFArray?>.allocate(capacity: 1)
         let namesError = AXUIElementCopyAttributeNames(ele, arrs)
         guard namesError == .success else {
-            self.actionLabel.stringValue = "ele error \(namesError.rawValue)"
-            return
+            debugPrint("ele error \(namesError.rawValue)")
+//            self.actionLabel.stringValue = "ele error \(namesError.rawValue)"
+            return nil
         }
         if let p = arrs.pointee {
             debugPrint(p)
+            return p as? [String]
         }
+        return nil
     }
     
     @discardableResult
@@ -375,6 +353,7 @@ class ViewController: NSViewController {
         let att = attribute as CFString
         let frontMostError = AXUIElementCopyAttributeValue(element, att, &copyedValue)
         if let _ = copyedValue {
+            debugPrint("get attribute \(frontMostError.rawValue)")
             self.actionLabel.stringValue = "\(frontMostError.rawValue)"
         }
         return copyedValue
@@ -384,7 +363,8 @@ class ViewController: NSViewController {
 //        getAttribute(attribute, element: element)
         let att = attribute as CFString
         let setError = AXUIElementSetAttributeValue(element, att, value)
-        self.actionLabel.stringValue = "----\(setError.rawValue)"
+        debugPrint("setAttribute----\(setError.rawValue)")
+//        self.actionLabel.stringValue = "----\(setError.rawValue)"
     }
     
     
@@ -396,10 +376,12 @@ func clickKeyboard(flags: CGEventFlags? = nil, virtualKey: Int) {
     
     let downAction = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(virtualKey), keyDown: true)
     if let down = downAction {
+        
         if let f = flags {
             down.flags = f
         }
         down.post(tap: .cghidEventTap)
+//        down.post(tap: .cghidEventTap)
         let upAction = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(virtualKey), keyDown: false)
         if let up = upAction {
             if let f = flags {
