@@ -16,10 +16,11 @@
 		88132BC5293B4CBE00C0AAC6 /* TimeoutCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88132BC4293B4CBD00C0AAC6 /* TimeoutCache.swift */; };
 		88132BC8293B4CE100C0AAC6 /* DispatchTimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88132BC7293B4CE100C0AAC6 /* DispatchTimeExtension.swift */; };
 		88132BCA293B4D1500C0AAC6 /* CFExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88132BC9293B4D1500C0AAC6 /* CFExtension.swift */; };
-		88132BCC293B95FE00C0AAC6 /* AccessibilityElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88132BCB293B95FE00C0AAC6 /* AccessibilityElement.swift */; };
 		88132BCE293B963200C0AAC6 /* AXExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88132BCD293B963200C0AAC6 /* AXExtension.swift */; };
 		886F2E03293CC57A00311048 /* AccessibilityAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F2E01293CC57A00311048 /* AccessibilityAuthorization.swift */; };
 		886F2E04293CC57A00311048 /* AccessibilityWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F2E02293CC57A00311048 /* AccessibilityWindowController.swift */; };
+		88767465293E1DF700A63D0D /* WZMagicMouseHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88767464293E1DF700A63D0D /* WZMagicMouseHandle.swift */; };
+		88767467293E1F6A00A63D0D /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88767466293E1F6A00A63D0D /* CGRectExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,10 +35,11 @@
 		88132BC4293B4CBD00C0AAC6 /* TimeoutCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeoutCache.swift; sourceTree = "<group>"; };
 		88132BC7293B4CE100C0AAC6 /* DispatchTimeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchTimeExtension.swift; sourceTree = "<group>"; };
 		88132BC9293B4D1500C0AAC6 /* CFExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CFExtension.swift; sourceTree = "<group>"; };
-		88132BCB293B95FE00C0AAC6 /* AccessibilityElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityElement.swift; sourceTree = "<group>"; };
 		88132BCD293B963200C0AAC6 /* AXExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXExtension.swift; sourceTree = "<group>"; };
 		886F2E01293CC57A00311048 /* AccessibilityAuthorization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityAuthorization.swift; sourceTree = "<group>"; };
 		886F2E02293CC57A00311048 /* AccessibilityWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityWindowController.swift; sourceTree = "<group>"; };
+		88767464293E1DF700A63D0D /* WZMagicMouseHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WZMagicMouseHandle.swift; sourceTree = "<group>"; };
+		88767466293E1F6A00A63D0D /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,11 +88,12 @@
 			isa = PBXGroup;
 			children = (
 				88132BCD293B963200C0AAC6 /* AXExtension.swift */,
-				88132BCB293B95FE00C0AAC6 /* AccessibilityElement.swift */,
 				88132BC9293B4D1500C0AAC6 /* CFExtension.swift */,
 				88132BC7293B4CE100C0AAC6 /* DispatchTimeExtension.swift */,
 				88132BC2293B4C6A00C0AAC6 /* WindowUtil.swift */,
 				88132BC4293B4CBD00C0AAC6 /* TimeoutCache.swift */,
+				88767464293E1DF700A63D0D /* WZMagicMouseHandle.swift */,
+				88767466293E1F6A00A63D0D /* CGRectExtension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -178,13 +181,14 @@
 				88132BC3293B4C6A00C0AAC6 /* WindowUtil.swift in Sources */,
 				88132BCE293B963200C0AAC6 /* AXExtension.swift in Sources */,
 				88132BC1293B294D00C0AAC6 /* ScrollWheelDelta.swift in Sources */,
+				88767465293E1DF700A63D0D /* WZMagicMouseHandle.swift in Sources */,
 				886F2E03293CC57A00311048 /* AccessibilityAuthorization.swift in Sources */,
 				88132BAE293A309700C0AAC6 /* AppDelegate.swift in Sources */,
 				88132BC8293B4CE100C0AAC6 /* DispatchTimeExtension.swift in Sources */,
 				88132BC5293B4CBE00C0AAC6 /* TimeoutCache.swift in Sources */,
+				88767467293E1F6A00A63D0D /* CGRectExtension.swift in Sources */,
 				886F2E04293CC57A00311048 /* AccessibilityWindowController.swift in Sources */,
 				88132BCA293B4D1500C0AAC6 /* CFExtension.swift in Sources */,
-				88132BCC293B95FE00C0AAC6 /* AccessibilityElement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

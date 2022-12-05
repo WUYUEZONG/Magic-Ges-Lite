@@ -1,100 +1,66 @@
 //
-//  ViewController.swift
+//  WZMagicMouseHandle.swift
 //  Magic-Ges-Lite
 //
-//  Created by iMac on 2022/12/2.
+//  Created by iMac on 2022/12/5.
 //
 
 import Cocoa
 import CoreGraphics
 import Carbon.HIToolbox
 
-extension NSPoint {
-    func toCGPoint() -> NSPoint {
-        if let main = NSScreen.main {
-            return NSPoint(x: x, y: main.frame.height - y)
-        }
-        return NSPoint(x: self.x, y: 1080 - self.y)
-    }
-}
-
-extension Notification.Name {
-    static let getWindowInfo = Notification.Name("com.wyz.ges.lite.getWindowInfo")
-}
-
-class ViewController: NSViewController {
+class WZMagicMouseHandle {
     
-    @IBOutlet weak var actionLabel: NSTextField!
+    /// start lisening global mouse events (.scrollWheel)
+    func start() { }
+    
+    static let shared = WZMagicMouseHandle()
+    
+    private var scrollWhellEventX: NSEvent?
+    
+    private var scrollWhellEventY: NSEvent?
     
     
-    var menuBarScrollWhellEventX: NSEvent?
     
-    var menuBarScrollWhellEventY: NSEvent?
-    
-//    var windows: Set<WindowInfo>!
-    
-    var currenWindow: WindowInfo?
-    
-    var currentWindowNumber = 0
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-//        windows = WindowUtil.getWindowList()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-
-            if AXIsProcessTrusted() {
-                
-                NSApp.setActivationPolicy(.accessory)
-
-                debugPrint("已经拥有权限")
-                self.actionLabel.stringValue = "已经拥有权限"
-            } else {
-                self.actionLabel.stringValue = "没有拥有权限"
+    init() {
+        NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel]) { [self] event in
+            switch event.type {
+            case .scrollWheel:
+                doScrollWheel(event: event)
+                break
+            default: break
             }
         }
-        
-        WZMagicMouseHandle.shared.start()
-        
     }
     
-    @objc
-    func handleInfo(noti: Notification) {
-        
-        if let c = currenWindow {
-            let element = AXUIElementCreateApplication(c.pid)
-            let arrs = UnsafeMutablePointer<CFArray?>.allocate(capacity: 1)
-            AXUIElementCopyAttributeNames(element, arrs)
-            debugPrint(arrs.pointee ?? "nothing")
-        }
-        
-    }
+    
+    
+}
 
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
-    
-    func doMouseExited(event: NSEvent) {
-        debugPrint("doMouseExited \(event.windowNumber)")
-    }
+
+
+
+
+
+
+
+extension WZMagicMouseHandle {
     
     
     func getScrollWheelEventUnderMouseElement(event: NSEvent, onMenuBar:(()->Void)?, onAppNavgationBar:((AXUIElement?, CGRect?)->Void)?) {
-        let etmloc = NSEvent.mouseLocation
         
-        let smain = NSScreen.main!
-        let statusY = smain.visibleFrame.maxY
-        let dockY = smain.visibleFrame.minY
+        guard let main = NSScreen.main else { return }
+        
+        let mouseLocation = NSEvent.mouseLocation
+        let statusY = main.visibleFrame.maxY
+        let dockY = main.visibleFrame.minY
         
         var element: AXUIElement?
         var current: WindowInfo?
         
-        if etmloc.y >= statusY {
+        if mouseLocation.y >= statusY {
             onMenuBar?()
-        } else if  etmloc.y <= dockY {
+        } else if  mouseLocation.y <= dockY {
             
             // dock actions
             return
@@ -103,11 +69,11 @@ class ViewController: NSViewController {
             
             current = WindowUtil.getWindowList().first { a in
                 debugPrint("current evet \(event.windowNumber)")
-                return event.windowNumber == a.id && a.frame.contains(etmloc.toCGPoint())
+                return event.windowNumber == a.id && a.frame.contains(mouseLocation.toCGPoint())
             }
             
             // 38 假定的应用导航栏高度
-            if let current = current, etmloc.toCGPoint().y - current.frame.minY < 38 {
+            if let current = current, mouseLocation.toCGPoint().y - current.frame.minY < 38 {
                 element = AXUIElementCreateApplication(current.pid)
             }
             
@@ -118,29 +84,10 @@ class ViewController: NSViewController {
         }
     }
     
-    @objc
-    func resetCursor() {
-        NSCursor.arrow.set()
-    }
     
-    func maxFrame() -> CGRect {
-        let main = NSScreen.main!
-        return CGRect(x: 0, y: main.frame.height - main.visibleFrame.maxY, width: main.frame.width, height: main.visibleFrame.height - 1)
-    }
-    
-    func leftHalfFrame() -> CGRect {
-        let main = NSScreen.main!
-        let hw = main.frame.width / 2
-        return CGRect(x: 0, y: main.frame.height - main.visibleFrame.maxY, width: hw, height: main.visibleFrame.height - 1)
-    }
-    
-    func rightHalfFrame() -> CGRect {
-        let main = NSScreen.main!
-        let hw = main.frame.width / 2
-        return CGRect(x: hw, y: main.frame.height - main.visibleFrame.maxY, width: hw, height: main.visibleFrame.height - 1)
-    }
-    
-    func setNewFrame(frame: CGRect, for event: NSEvent) {
+    func setNewFrame(frame: CGRect?, for event: NSEvent) {
+        
+        guard let frame = frame else { return }
         
         self.getScrollWheelEventUnderMouseElement(event: event, onMenuBar: nil) { element, eFrame in
             
@@ -166,20 +113,19 @@ class ViewController: NSViewController {
     }
     
     
-    
     func doScrollWheel(event: NSEvent) {
         
         doScrollWhell(event: event) { e in
             
-            self.setNewFrame(frame: self.leftHalfFrame(), for: e)
+            self.setNewFrame(frame: .leftHalf, for: e)
             
         } up: { e in
             
-            self.setNewFrame(frame: self.maxFrame(), for: e)
+            self.setNewFrame(frame: .visiableMax, for: e)
             
         } right: { e in
             
-            self.setNewFrame(frame: self.rightHalfFrame(), for: e)
+            self.setNewFrame(frame: .rightHalf, for: e)
             
         } down: { e in
             
@@ -197,35 +143,35 @@ class ViewController: NSViewController {
     func doScrollWhell(event: NSEvent, left: ((NSEvent) -> Void)?, up: ((NSEvent) -> Void)?, right: ((NSEvent) -> Void)?, down: ((NSEvent) -> Void)?) {
         switch event.phase {
         case .began, .mayBegin:
-            menuBarScrollWhellEventX = nil
-            menuBarScrollWhellEventY = nil
+            scrollWhellEventX = nil
+            scrollWhellEventY = nil
             break
         case .changed:
-            if let x = menuBarScrollWhellEventX {
+            if let x = scrollWhellEventX {
                 let oldX = abs(x.deltaX)
                 let newX = abs(event.deltaX)
                 if newX > oldX {
-                    menuBarScrollWhellEventX = event
+                    scrollWhellEventX = event
                 }
             } else {
-                menuBarScrollWhellEventX = event
+                scrollWhellEventX = event
             }
             
-            if let y = menuBarScrollWhellEventY {
+            if let y = scrollWhellEventY {
                 let oldY = abs(y.deltaY)
                 let newY = abs(event.deltaY)
                 if newY > oldY {
-                    menuBarScrollWhellEventY = event
+                    scrollWhellEventY = event
                 }
             } else {
-                menuBarScrollWhellEventY = event
+                scrollWhellEventY = event
             }
             
             
             break
         case .ended:
             
-            guard let xEvent = menuBarScrollWhellEventX, let yEvent = menuBarScrollWhellEventY else { return }
+            guard let xEvent = scrollWhellEventX, let yEvent = scrollWhellEventY else { return }
             
             if abs(xEvent.deltaX) > abs(yEvent.deltaY) {
                 // 水平操作
@@ -235,8 +181,6 @@ class ViewController: NSViewController {
                     if let left = left {
                         left(xEvent)
                     }
-//
-//                            clickKeyboard(flags: .maskControl, virtualKey: kVK_LeftArrow)
                 } else {
                     debugPrint("向右➡️划动了")
                     if let right = right {
@@ -259,14 +203,11 @@ class ViewController: NSViewController {
                         down(yEvent)
                     }
                     
-                    
-//                            clickKeyboard(flagKey: kVK_Command, virtualKey: kVK_ANSI_M)
-                    
                 }
             }
             
-            menuBarScrollWhellEventX = nil
-            menuBarScrollWhellEventY = nil
+            scrollWhellEventX = nil
+            scrollWhellEventY = nil
             
         default: break
         }
@@ -274,12 +215,10 @@ class ViewController: NSViewController {
     }
     
     
+}
 
-    
-    @IBAction func resizeWindow(_ sender: Any) {
-//        setOwnerOfMenuBarMinimized()
-    }
-    
+
+extension WZMagicMouseHandle {
     
     func setAttributeFor(element: AXUIElement, attribute: NSAccessibility.Attribute, value: AnyObject) {
         
@@ -324,7 +263,6 @@ class ViewController: NSViewController {
         let frontMostError = AXUIElementCopyAttributeValue(element, att, &copyedValue)
         if let _ = copyedValue {
             debugPrint("get attribute \(frontMostError.rawValue)")
-            self.actionLabel.stringValue = "\(frontMostError.rawValue)"
         }
         return copyedValue
     }
@@ -336,45 +274,4 @@ class ViewController: NSViewController {
         debugPrint("setAttribute----\(setError.rawValue)")
 //        self.actionLabel.stringValue = "----\(setError.rawValue)"
     }
-    
-    
-    
 }
-
-
-func clickKeyboard(flags: CGEventFlags? = nil, virtualKey: Int) {
-    
-    let downAction = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(virtualKey), keyDown: true)
-    if let down = downAction {
-        
-        if let f = flags {
-            down.flags = f
-        }
-        down.post(tap: .cghidEventTap)
-//        down.post(tap: .cghidEventTap)
-        let upAction = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(virtualKey), keyDown: false)
-        if let up = upAction {
-            if let f = flags {
-                up.flags = f
-            }
-            up.post(tap: .cghidEventTap)
-        }
-    }
-}
-
-func clickKeyboard(flagKey: Int, virtualKey: Int) {
-    
-    let flagKeyDown = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(flagKey), keyDown: true)
-    flagKeyDown?.post(tap: .cghidEventTap)
-    
-    let virtualKeyDown = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(virtualKey), keyDown: true)
-    virtualKeyDown?.post(tap: .cghidEventTap)
-    
-    
-    let virtualKeyUp = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(virtualKey), keyDown: false)
-    virtualKeyUp?.post(tap: .cghidEventTap)
-    
-    let flagKeyUp = CGEvent(keyboardEventSource: nil, virtualKey: CGKeyCode(flagKey), keyDown: false)
-    flagKeyUp?.post(tap: .cghidEventTap)
-}
-
