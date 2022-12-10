@@ -11,8 +11,10 @@ import SwiftUI
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    private let accessibilityAuthorization = AccessibilityAuthorization()
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    let menu = NSMenu()
 
+    let content = ContentWindow()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -20,19 +22,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         NSApplication.shared.setActivationPolicy(.accessory)
         
-        let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem.isVisible = true
-        let image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
         
-        statusItem.button?.image = image
-        statusItem.button?.action = #selector(openStatusMenus)
+        if let button = statusItem.button {
+            let image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
+            button.image = image
+//            button.action = #selector(openStatusMenus)
+        }
         
+        menu.addItem(withTitle: "打开界面", action: #selector(openStatusMenus), keyEquivalent: "o")
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(withTitle: "退出", action: #selector(quitApp), keyEquivalent: "q")
+        statusItem.menu = menu
         
-        
-        let content = ContentWindow()
-        let vc = NSWindowController(window: content)
         NSApp.activate(ignoringOtherApps: true)
-        vc.showWindow(self)
+        content.makeKeyAndOrderFront(self)
         if !AXIsProcessTrusted() {
             let accessibility = RequestAccessabilityView()
             let aWindow = NSWindow(contentRect: .zero, styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
@@ -48,11 +51,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
         }
         
+        WZMagicMouseHandle.shared.start()
+        
      
     }
     
     @objc func openStatusMenus() {
-        
+        NSApp.activate(ignoringOtherApps: true)
     }
     
     

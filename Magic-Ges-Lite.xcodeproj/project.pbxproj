@@ -10,8 +10,6 @@
 		88132BAE293A309700C0AAC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88132BAD293A309700C0AAC6 /* AppDelegate.swift */; };
 		88132BB2293A309800C0AAC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88132BB1293A309800C0AAC6 /* Assets.xcassets */; };
 		88132BB5293A309800C0AAC6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88132BB3293A309800C0AAC6 /* Main.storyboard */; };
-		886F2E03293CC57A00311048 /* AccessibilityAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F2E01293CC57A00311048 /* AccessibilityAuthorization.swift */; };
-		886F2E04293CC57A00311048 /* AccessibilityWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F2E02293CC57A00311048 /* AccessibilityWindowController.swift */; };
 		8872691E2944943600B40B52 /* RequestAccessabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887268FC2944943500B40B52 /* RequestAccessabilityView.swift */; };
 		8872691F2944943600B40B52 /* BaseSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887268FD2944943500B40B52 /* BaseSettingView.swift */; };
 		887269292944943600B40B52 /* ThanksItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269092944943500B40B52 /* ThanksItemView.swift */; };
@@ -47,8 +45,6 @@
 		88132BB1293A309800C0AAC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		88132BB4293A309800C0AAC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		88132BB6293A309800C0AAC6 /* Magic_Ges_Lite.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Magic_Ges_Lite.entitlements; sourceTree = "<group>"; };
-		886F2E01293CC57A00311048 /* AccessibilityAuthorization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityAuthorization.swift; sourceTree = "<group>"; };
-		886F2E02293CC57A00311048 /* AccessibilityWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityWindowController.swift; sourceTree = "<group>"; };
 		887268FC2944943500B40B52 /* RequestAccessabilityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestAccessabilityView.swift; sourceTree = "<group>"; };
 		887268FD2944943500B40B52 /* BaseSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSettingView.swift; sourceTree = "<group>"; };
 		887269092944943500B40B52 /* ThanksItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThanksItemView.swift; sourceTree = "<group>"; };
@@ -123,21 +119,11 @@
 				887269132944943600B40B52 /* Strings */,
 				887269112944943500B40B52 /* SystemImages */,
 				8872693F2944BB0300B40B52 /* Utils */,
-				886F2E00293CC57A00311048 /* AccessibilityAuthorization */,
 				88132BB1293A309800C0AAC6 /* Assets.xcassets */,
 				88132BB3293A309800C0AAC6 /* Main.storyboard */,
 				88132BB6293A309800C0AAC6 /* Magic_Ges_Lite.entitlements */,
 			);
 			path = "Magic-Ges-Lite";
-			sourceTree = "<group>";
-		};
-		886F2E00293CC57A00311048 /* AccessibilityAuthorization */ = {
-			isa = PBXGroup;
-			children = (
-				886F2E01293CC57A00311048 /* AccessibilityAuthorization.swift */,
-				886F2E02293CC57A00311048 /* AccessibilityWindowController.swift */,
-			);
-			path = AccessibilityAuthorization;
 			sourceTree = "<group>";
 		};
 		887268FB2944943500B40B52 /* Settings */ = {
@@ -329,7 +315,6 @@
 				8872693D29449A0500B40B52 /* ContentWindow.swift in Sources */,
 				887269352944943600B40B52 /* GestureInfoCellView.swift in Sources */,
 				8872691E2944943600B40B52 /* RequestAccessabilityView.swift in Sources */,
-				886F2E03293CC57A00311048 /* AccessibilityAuthorization.swift in Sources */,
 				8872693B294497CB00B40B52 /* ContentView.swift in Sources */,
 				8872694E2944BB0300B40B52 /* AXExtension.swift in Sources */,
 				8872694A2944BB0300B40B52 /* WZMagicMouseHandle.swift in Sources */,
@@ -344,7 +329,6 @@
 				8872692D2944943600B40B52 /* StateWindow.swift in Sources */,
 				887269502944BB0300B40B52 /* CGRectExtension.swift in Sources */,
 				8872692A2944943600B40B52 /* AboutAppView.swift in Sources */,
-				886F2E04293CC57A00311048 /* AccessibilityWindowController.swift in Sources */,
 				887269332944943600B40B52 /* MenuItem.swift in Sources */,
 				8872692B2944943600B40B52 /* FontExtension.swift in Sources */,
 			);

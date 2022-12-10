@@ -41,10 +41,12 @@ class WindowUtil {
         return infos
     }
     
-    static func getOnScreenWindows() -> [Int: WindowInfo] {
+    static func getOnScreenWindows(_ wid: CGWindowID? = nil) -> [Int: WindowInfo] {
+        let wid: CGWindowID = wid ?? kCGNullWindowID
         
         var infos: [Int: WindowInfo] = [:]
-        let array: CFArray? = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID)
+//            .optionOnScreenOnly,
+        let array: CFArray? = CGWindowListCopyWindowInfo([ .excludeDesktopElements, .optionIncludingWindow], wid)
         
         if let array = array {
             let count = array.getCount()

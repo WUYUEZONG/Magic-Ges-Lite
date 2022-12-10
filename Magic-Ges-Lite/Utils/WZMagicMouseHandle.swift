@@ -194,9 +194,13 @@ extension WZMagicMouseHandle {
 //        let statusY = main.visibleFrame.maxY
 //        let dockY = main.visibleFrame.minY
         
-        guard var current = WindowUtil.getOnScreenWindows()[event.windowNumber],
+        let screenWindows = WindowUtil.getOnScreenWindows(CGWindowID(event.windowNumber))
+        let current = screenWindows[event.windowNumber]
+        debugPrint(screenWindows)
+        debugPrint("\(event.windowNumber)")
+        guard var current = current,
               current.frame.contains(mouseLocation.toCGPoint()) else { return nil }
-            
+        
         // 38 假定的应用导航栏高度
         guard mouseLocation.toCGPoint().y - current.frame.minY < 38 else { return nil }
         
@@ -211,18 +215,21 @@ extension WZMagicMouseHandle {
                 if let value = $0.getValue(.frame) {
                     let value = value as! AXValue
 //                    kAXValueCGRectType
+                    
                     if let frame: CGRect = value.toValue() {
-                        return frame.equalTo(current.frame)
+                        let inFrame = mouseLocation.toCGPoint().y - frame.minY < 38
+                        return frame.equalTo(current.frame) || inFrame
                     }
+                    
                     
                 }
             }
             return false
         }
         
-        if windowElement == nil && lists.count == 1 {
-            windowElement = lists.first!
-        }
+//        if windowElement == nil && lists.count == 1 {
+//            windowElement = lists.first!
+//        }
         
         current.element = windowElement
         return current
