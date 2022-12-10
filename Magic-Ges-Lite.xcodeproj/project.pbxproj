@@ -14,15 +14,6 @@
 		886F2E04293CC57A00311048 /* AccessibilityWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F2E02293CC57A00311048 /* AccessibilityWindowController.swift */; };
 		8872691E2944943600B40B52 /* RequestAccessabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887268FC2944943500B40B52 /* RequestAccessabilityView.swift */; };
 		8872691F2944943600B40B52 /* BaseSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887268FD2944943500B40B52 /* BaseSettingView.swift */; };
-		887269202944943600B40B52 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887268FF2944943500B40B52 /* WindowUtil.swift */; };
-		887269212944943600B40B52 /* WZMagicMouseHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269002944943500B40B52 /* WZMagicMouseHandle.swift */; };
-		887269222944943600B40B52 /* CFExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269012944943500B40B52 /* CFExtension.swift */; };
-		887269232944943600B40B52 /* TimeoutCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269022944943500B40B52 /* TimeoutCache.swift */; };
-		887269242944943600B40B52 /* DispatchTimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269032944943500B40B52 /* DispatchTimeExtension.swift */; };
-		887269252944943600B40B52 /* AXExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269042944943500B40B52 /* AXExtension.swift */; };
-		887269262944943600B40B52 /* HalfFishSomething.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269052944943500B40B52 /* HalfFishSomething.swift */; };
-		887269272944943600B40B52 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269062944943500B40B52 /* CGRectExtension.swift */; };
-		887269282944943600B40B52 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269072944943500B40B52 /* UserDefaults.swift */; };
 		887269292944943600B40B52 /* ThanksItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269092944943500B40B52 /* ThanksItemView.swift */; };
 		8872692A2944943600B40B52 /* AboutAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8872690A2944943500B40B52 /* AboutAppView.swift */; };
 		8872692B2944943600B40B52 /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8872690C2944943500B40B52 /* FontExtension.swift */; };
@@ -39,6 +30,15 @@
 		88726938294494E900B40B52 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 88726937294494E900B40B52 /* LaunchAtLogin */; };
 		8872693B294497CB00B40B52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8872693A294497CB00B40B52 /* ContentView.swift */; };
 		8872693D29449A0500B40B52 /* ContentWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8872693C29449A0500B40B52 /* ContentWindow.swift */; };
+		887269492944BB0300B40B52 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269402944BB0300B40B52 /* WindowUtil.swift */; };
+		8872694A2944BB0300B40B52 /* WZMagicMouseHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269412944BB0300B40B52 /* WZMagicMouseHandle.swift */; };
+		8872694B2944BB0300B40B52 /* CFExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269422944BB0300B40B52 /* CFExtension.swift */; };
+		8872694C2944BB0300B40B52 /* TimeoutCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269432944BB0300B40B52 /* TimeoutCache.swift */; };
+		8872694D2944BB0300B40B52 /* DispatchTimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269442944BB0300B40B52 /* DispatchTimeExtension.swift */; };
+		8872694E2944BB0300B40B52 /* AXExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269452944BB0300B40B52 /* AXExtension.swift */; };
+		8872694F2944BB0300B40B52 /* HalfFishSomething.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269462944BB0300B40B52 /* HalfFishSomething.swift */; };
+		887269502944BB0300B40B52 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269472944BB0300B40B52 /* CGRectExtension.swift */; };
+		887269512944BB0300B40B52 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269482944BB0300B40B52 /* UserDefaults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,15 +51,6 @@
 		886F2E02293CC57A00311048 /* AccessibilityWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityWindowController.swift; sourceTree = "<group>"; };
 		887268FC2944943500B40B52 /* RequestAccessabilityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestAccessabilityView.swift; sourceTree = "<group>"; };
 		887268FD2944943500B40B52 /* BaseSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSettingView.swift; sourceTree = "<group>"; };
-		887268FF2944943500B40B52 /* WindowUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowUtil.swift; sourceTree = "<group>"; };
-		887269002944943500B40B52 /* WZMagicMouseHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WZMagicMouseHandle.swift; sourceTree = "<group>"; };
-		887269012944943500B40B52 /* CFExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CFExtension.swift; sourceTree = "<group>"; };
-		887269022944943500B40B52 /* TimeoutCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeoutCache.swift; sourceTree = "<group>"; };
-		887269032944943500B40B52 /* DispatchTimeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchTimeExtension.swift; sourceTree = "<group>"; };
-		887269042944943500B40B52 /* AXExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXExtension.swift; sourceTree = "<group>"; };
-		887269052944943500B40B52 /* HalfFishSomething.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfFishSomething.swift; sourceTree = "<group>"; };
-		887269062944943500B40B52 /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
-		887269072944943500B40B52 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		887269092944943500B40B52 /* ThanksItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThanksItemView.swift; sourceTree = "<group>"; };
 		8872690A2944943500B40B52 /* AboutAppView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutAppView.swift; sourceTree = "<group>"; };
 		8872690C2944943500B40B52 /* FontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
@@ -77,6 +68,15 @@
 		8872693A294497CB00B40B52 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8872693C29449A0500B40B52 /* ContentWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentWindow.swift; sourceTree = "<group>"; };
 		8872693E2944ADFE00B40B52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		887269402944BB0300B40B52 /* WindowUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowUtil.swift; sourceTree = "<group>"; };
+		887269412944BB0300B40B52 /* WZMagicMouseHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WZMagicMouseHandle.swift; sourceTree = "<group>"; };
+		887269422944BB0300B40B52 /* CFExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CFExtension.swift; sourceTree = "<group>"; };
+		887269432944BB0300B40B52 /* TimeoutCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeoutCache.swift; sourceTree = "<group>"; };
+		887269442944BB0300B40B52 /* DispatchTimeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchTimeExtension.swift; sourceTree = "<group>"; };
+		887269452944BB0300B40B52 /* AXExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXExtension.swift; sourceTree = "<group>"; };
+		887269462944BB0300B40B52 /* HalfFishSomething.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfFishSomething.swift; sourceTree = "<group>"; };
+		887269472944BB0300B40B52 /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
+		887269482944BB0300B40B52 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +122,7 @@
 				887268FB2944943500B40B52 /* Settings */,
 				887269132944943600B40B52 /* Strings */,
 				887269112944943500B40B52 /* SystemImages */,
-				887268FE2944943500B40B52 /* Utils */,
+				8872693F2944BB0300B40B52 /* Utils */,
 				886F2E00293CC57A00311048 /* AccessibilityAuthorization */,
 				88132BB1293A309800C0AAC6 /* Assets.xcassets */,
 				88132BB3293A309800C0AAC6 /* Main.storyboard */,
@@ -147,23 +147,6 @@
 				887268FD2944943500B40B52 /* BaseSettingView.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		887268FE2944943500B40B52 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				887268FF2944943500B40B52 /* WindowUtil.swift */,
-				887269002944943500B40B52 /* WZMagicMouseHandle.swift */,
-				887269012944943500B40B52 /* CFExtension.swift */,
-				887269022944943500B40B52 /* TimeoutCache.swift */,
-				887269032944943500B40B52 /* DispatchTimeExtension.swift */,
-				887269042944943500B40B52 /* AXExtension.swift */,
-				887269052944943500B40B52 /* HalfFishSomething.swift */,
-				887269062944943500B40B52 /* CGRectExtension.swift */,
-				887269072944943500B40B52 /* UserDefaults.swift */,
-			);
-			name = Utils;
-			path = ../../MagicGesture/MagicGesture/Utils;
 			sourceTree = "<group>";
 		};
 		887269082944943500B40B52 /* About */ = {
@@ -218,6 +201,22 @@
 				8872691D2944943600B40B52 /* GestureInfoCellView.swift */,
 			);
 			path = MagicMouse;
+			sourceTree = "<group>";
+		};
+		8872693F2944BB0300B40B52 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				887269402944BB0300B40B52 /* WindowUtil.swift */,
+				887269412944BB0300B40B52 /* WZMagicMouseHandle.swift */,
+				887269422944BB0300B40B52 /* CFExtension.swift */,
+				887269432944BB0300B40B52 /* TimeoutCache.swift */,
+				887269442944BB0300B40B52 /* DispatchTimeExtension.swift */,
+				887269452944BB0300B40B52 /* AXExtension.swift */,
+				887269462944BB0300B40B52 /* HalfFishSomething.swift */,
+				887269472944BB0300B40B52 /* CGRectExtension.swift */,
+				887269482944BB0300B40B52 /* UserDefaults.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,30 +323,30 @@
 			files = (
 				8872691F2944943600B40B52 /* BaseSettingView.swift in Sources */,
 				887269292944943600B40B52 /* ThanksItemView.swift in Sources */,
-				887269252944943600B40B52 /* AXExtension.swift in Sources */,
-				887269262944943600B40B52 /* HalfFishSomething.swift in Sources */,
+				8872694B2944BB0300B40B52 /* CFExtension.swift in Sources */,
 				8872692F2944943600B40B52 /* SystemImages.swift in Sources */,
+				887269512944BB0300B40B52 /* UserDefaults.swift in Sources */,
 				8872693D29449A0500B40B52 /* ContentWindow.swift in Sources */,
 				887269352944943600B40B52 /* GestureInfoCellView.swift in Sources */,
-				887269242944943600B40B52 /* DispatchTimeExtension.swift in Sources */,
 				8872691E2944943600B40B52 /* RequestAccessabilityView.swift in Sources */,
 				886F2E03293CC57A00311048 /* AccessibilityAuthorization.swift in Sources */,
 				8872693B294497CB00B40B52 /* ContentView.swift in Sources */,
-				887269222944943600B40B52 /* CFExtension.swift in Sources */,
+				8872694E2944BB0300B40B52 /* AXExtension.swift in Sources */,
+				8872694A2944BB0300B40B52 /* WZMagicMouseHandle.swift in Sources */,
 				88132BAE293A309700C0AAC6 /* AppDelegate.swift in Sources */,
+				887269492944BB0300B40B52 /* WindowUtil.swift in Sources */,
+				8872694F2944BB0300B40B52 /* HalfFishSomething.swift in Sources */,
+				8872694D2944BB0300B40B52 /* DispatchTimeExtension.swift in Sources */,
+				8872694C2944BB0300B40B52 /* TimeoutCache.swift in Sources */,
 				8872692E2944943600B40B52 /* StateAction.swift in Sources */,
-				887269282944943600B40B52 /* UserDefaults.swift in Sources */,
-				887269212944943600B40B52 /* WZMagicMouseHandle.swift in Sources */,
-				887269232944943600B40B52 /* TimeoutCache.swift in Sources */,
 				887269342944943600B40B52 /* MagicMouseView.swift in Sources */,
 				887269322944943600B40B52 /* LocalizeExtensions.swift in Sources */,
-				887269202944943600B40B52 /* WindowUtil.swift in Sources */,
 				8872692D2944943600B40B52 /* StateWindow.swift in Sources */,
+				887269502944BB0300B40B52 /* CGRectExtension.swift in Sources */,
 				8872692A2944943600B40B52 /* AboutAppView.swift in Sources */,
 				886F2E04293CC57A00311048 /* AccessibilityWindowController.swift in Sources */,
 				887269332944943600B40B52 /* MenuItem.swift in Sources */,
 				8872692B2944943600B40B52 /* FontExtension.swift in Sources */,
-				887269272944943600B40B52 /* CGRectExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
