@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  MagicGesture
+
+  Created by mntechMac on 2022/12/6.
+  
+*/
+
+"CFBundleName" = "窗口手势";
+"CFBundleDisplayName" = "窗口手势";

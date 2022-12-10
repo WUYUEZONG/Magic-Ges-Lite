@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  MagicGesture
+
+  Created by mntechMac on 2022/12/6.
+  
+*/
+
+"CFBundleName" = "Magic Gesture";
+"CFBundleDisplayName" = "Magic Gesture";
