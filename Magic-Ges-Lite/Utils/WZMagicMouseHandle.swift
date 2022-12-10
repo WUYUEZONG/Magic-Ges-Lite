@@ -52,7 +52,7 @@ class WZMagicMouseHandle {
     
     private var focusedWindow: WindowInfo?
     
-    var hud: NSWindowController?
+//    var hud: NSWindowController?
     
     init() {
         

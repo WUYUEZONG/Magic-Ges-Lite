@@ -18,24 +18,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to initialize your application
         
         
+        NSApplication.shared.setActivationPolicy(.accessory)
+        
+        let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        statusItem.isVisible = true
+        let image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
+        
+        statusItem.button?.image = image
+        statusItem.button?.action = #selector(openStatusMenus)
         
         
         
         let content = ContentWindow()
         let vc = NSWindowController(window: content)
+        NSApp.activate(ignoringOtherApps: true)
         vc.showWindow(self)
         if !AXIsProcessTrusted() {
             let accessibility = RequestAccessabilityView()
-            let aWindow = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 300, height: 500), styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
+            let aWindow = NSWindow(contentRect: .zero, styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
             aWindow.contentView = NSHostingView(rootView: accessibility)
             aWindow.setFrame(NSRect(origin: .zero, size: aWindow.contentView?.fittingSize ?? CGSize(width: 500, height: 600)), display: true)
             aWindow.title = "RequestAccessabilityView"
+            aWindow.isReleasedWhenClosed = false
+            aWindow.titlebarAppearsTransparent = true
+            aWindow.titleVisibility = .hidden
+//            aWindow.
             aWindow.center()
             aWindow.orderFront(self)
             
         }
         
      
+    }
+    
+    @objc func openStatusMenus() {
+        
     }
     
     
