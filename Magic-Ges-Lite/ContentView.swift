@@ -81,8 +81,8 @@ extension ContentView {
                             .keyboardShortcut(KeyEquivalent(item.keyboardShortCut))
                     }
 
-
                 }
+                .padding(.top, 20)
                 .listStyle(.sidebar)
 
             } detail: {

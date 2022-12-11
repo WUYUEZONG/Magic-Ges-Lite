@@ -10,6 +10,8 @@ import SwiftUI
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    @AppStorage(UserDefaults.UserKey.gestureCount.rawValue) var gestureCounting = 0
 
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     let menu = NSMenu()
@@ -17,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let content = ContentWindow()
     
     var toggleGestureItem = NSMenuItem()
+    var countingGestureItem = NSMenuItem()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -30,7 +33,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.image = image
 
         }
-        
+        countingGestureItem.title = String(localized: "\(gestureCounting) Gestures")//NSLocalizedString("\(gestureCounting) Gestures", comment: "") 
+        menu.addItem(countingGestureItem)
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(withTitle: NSLocalizedString("Open Main Window", comment: ""), action: #selector(openStatusMenus), keyEquivalent: "o")
         menu.addItem(NSMenuItem.separator())
         toggleGestureItem.title = WZMagicMouseHandle.shared.running ? NSLocalizedString("Stop Gesture", comment: "") : NSLocalizedString("Start Gesture", comment: "")

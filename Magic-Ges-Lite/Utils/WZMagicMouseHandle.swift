@@ -251,6 +251,8 @@ extension WZMagicMouseHandle {
         
         doScrollWhell(event: event) { action, e in
             
+            self.countGesture()
+            
             switch action {
                 
             case let .normal(direction):
@@ -400,6 +402,7 @@ extension WZMagicMouseHandle {
                 case .normal:
                     self.gestureState = .normal(self.calEvents(event: scrollWhellEvent!).direction)
                     self.state.show(self.gestureState, needHide: false)
+                    
                     break
                 case .hold:
                     self.gestureState = .hold(self.calEvents(event: scrollWhellEvent!).direction)
@@ -467,6 +470,13 @@ extension WZMagicMouseHandle {
         default: break
         }
         
+    }
+    
+    func countGesture() {
+        if let delegate = NSApplication.shared.delegate as? AppDelegate {
+            delegate.gestureCounting += 1
+            delegate.countingGestureItem.title = NSLocalizedString("\(delegate.gestureCounting) Gestures", comment: "")
+        }
     }
     
     func calEvents(event: NSEvent) -> (direction: StateAction.Direction, event: NSEvent) {

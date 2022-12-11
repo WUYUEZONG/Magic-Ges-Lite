@@ -60,7 +60,7 @@ struct AboutAppView: View {
 
                             ThanksItemView(name: "LaunchAtLogin", url: "https://github.com/sindresorhus/LaunchAtLogin")
                             
-                            ThanksItemView(name: "Nickainley-Normal", url: "https://www.dafont.com/nickainley.font")
+//                            ThanksItemView(name: "Nickainley-Normal", url: "https://www.dafont.com/nickainley.font")
                             
                         }
                         

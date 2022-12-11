@@ -7,8 +7,11 @@
 
 import Foundation
 import AppKit.NSAccessibility
+import SwiftUI
 
 //var a = _AXUIElementGetWindow(AXUIElementRef element, uint32_t *identifier);
+
+
 
 extension NSAccessibility.Attribute {
     static let enhancedUserInterface = NSAccessibility.Attribute(rawValue: "AXEnhancedUserInterface")
@@ -60,6 +63,7 @@ extension AXUIElement {
             debugPrint("setValue: ", error.rawValue)
             return false
         }
+        
         return true
     }
     

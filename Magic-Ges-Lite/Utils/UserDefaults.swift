@@ -12,6 +12,7 @@ extension UserDefaults {
     enum UserKey: String {
         case longActionDelay = "WZMagicMouseHandle.UserKeys.longActionDelay"
         case sensitivity = "WZMagicMouseHandle.UserKeys.sensitivity"
+        case gestureCount = "WZMagicMouseHandle.UserKeys.gestureCount"
         
     }
     

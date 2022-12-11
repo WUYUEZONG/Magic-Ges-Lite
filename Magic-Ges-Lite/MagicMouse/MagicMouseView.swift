@@ -16,6 +16,11 @@ struct MagicMouseView: View {
     var body: some View {
         List {
             
+            Text("妙控触控板同样可以使用双指操作。但暂未做过完整测试！")
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(Color.accentColor)
+            
             HStack {
                 Spacer()
                 Image(systemName: "macwindow")
@@ -31,6 +36,7 @@ struct MagicMouseView: View {
             .background(Color.accentColor)
             .cornerRadius(12)
             .padding(.top, 10)
+            
                 
             HStack {
                 Image(systemName: "exclamationmark.triangle.fill")
