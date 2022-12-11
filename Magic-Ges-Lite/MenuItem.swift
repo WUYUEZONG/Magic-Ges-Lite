@@ -35,4 +35,5 @@ extension MGMenuItem {
     static let magicMouse = MGMenuItem(name: "Maigc Mouse", image: "magicmouse.fill", keyboardShortCut: "3")
     static let help = MGMenuItem(name: "Help", image: "questionmark.circle.fill", keyboardShortCut: "4")
     static let about = MGMenuItem(name: "About", image: "info.circle.fill", keyboardShortCut: "5")
+    static let donate = MGMenuItem(name: "Donate", image: "dollarsign.circle.fill", keyboardShortCut: "6")
 }

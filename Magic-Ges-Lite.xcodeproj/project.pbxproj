@@ -37,6 +37,7 @@
 		8872694F2944BB0300B40B52 /* HalfFishSomething.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269462944BB0300B40B52 /* HalfFishSomething.swift */; };
 		887269502944BB0300B40B52 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269472944BB0300B40B52 /* CGRectExtension.swift */; };
 		887269512944BB0300B40B52 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269482944BB0300B40B52 /* UserDefaults.swift */; };
+		8872695429459FF500B40B52 /* DonateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8872695329459FF500B40B52 /* DonateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,7 @@
 		887269462944BB0300B40B52 /* HalfFishSomething.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HalfFishSomething.swift; sourceTree = "<group>"; };
 		887269472944BB0300B40B52 /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		887269482944BB0300B40B52 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		8872695329459FF500B40B52 /* DonateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,11 +112,12 @@
 				88132BAD293A309700C0AAC6 /* AppDelegate.swift */,
 				8872693C29449A0500B40B52 /* ContentWindow.swift */,
 				8872693A294497CB00B40B52 /* ContentView.swift */,
+				8872691A2944943600B40B52 /* MenuItem.swift */,
+				8872695229459FB400B40B52 /* Donate */,
 				887269082944943500B40B52 /* About */,
 				8872690B2944943500B40B52 /* Fonts */,
 				8872690E2944943500B40B52 /* HUD */,
 				8872691B2944943600B40B52 /* MagicMouse */,
-				8872691A2944943600B40B52 /* MenuItem.swift */,
 				887268FB2944943500B40B52 /* Settings */,
 				887269132944943600B40B52 /* Strings */,
 				887269112944943500B40B52 /* SystemImages */,
@@ -203,6 +206,14 @@
 				887269482944BB0300B40B52 /* UserDefaults.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		8872695229459FB400B40B52 /* Donate */ = {
+			isa = PBXGroup;
+			children = (
+				8872695329459FF500B40B52 /* DonateView.swift */,
+			);
+			path = Donate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -313,6 +324,7 @@
 				8872692F2944943600B40B52 /* SystemImages.swift in Sources */,
 				887269512944BB0300B40B52 /* UserDefaults.swift in Sources */,
 				8872693D29449A0500B40B52 /* ContentWindow.swift in Sources */,
+				8872695429459FF500B40B52 /* DonateView.swift in Sources */,
 				887269352944943600B40B52 /* GestureInfoCellView.swift in Sources */,
 				8872691E2944943600B40B52 /* RequestAccessabilityView.swift in Sources */,
 				8872693B294497CB00B40B52 /* ContentView.swift in Sources */,

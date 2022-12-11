@@ -15,23 +15,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let menu = NSMenu()
 
     let content = ContentWindow()
+    
+    var toggleGestureItem = NSMenuItem()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
         
         NSApplication.shared.setActivationPolicy(.accessory)
-        
+        WZMagicMouseHandle.shared.start()
         
         if let button = statusItem.button {
             let image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
             button.image = image
-//            button.action = #selector(openStatusMenus)
+
         }
         
-        menu.addItem(withTitle: "打开界面", action: #selector(openStatusMenus), keyEquivalent: "o")
+        menu.addItem(withTitle: NSLocalizedString("Open Main Window", comment: ""), action: #selector(openStatusMenus), keyEquivalent: "o")
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(withTitle: "退出", action: #selector(quitApp), keyEquivalent: "q")
+        toggleGestureItem.title = WZMagicMouseHandle.shared.running ? NSLocalizedString("Stop Gesture", comment: "") : NSLocalizedString("Start Gesture", comment: "")
+        toggleGestureItem.action = #selector(quitGesture)
+        toggleGestureItem.keyEquivalent = "E"
+        menu.addItem(toggleGestureItem)
+        menu.addItem(withTitle: NSLocalizedString("Exit", comment: ""), action: #selector(quitApp), keyEquivalent: "q")
         statusItem.menu = menu
         
         NSApp.activate(ignoringOtherApps: true)
@@ -45,24 +51,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             aWindow.isReleasedWhenClosed = false
             aWindow.titlebarAppearsTransparent = true
             aWindow.titleVisibility = .hidden
-//            aWindow.
             aWindow.center()
             aWindow.orderFront(self)
             
         }
         
-        WZMagicMouseHandle.shared.start()
+        
         
      
     }
     
     @objc func openStatusMenus() {
         NSApp.activate(ignoringOtherApps: true)
+        content.makeKeyAndOrderFront(self)
     }
     
     
     @objc func quitApp() {
         NSApplication.shared.terminate(self)
+    }
+    
+    @objc func quitGesture() {
+        let ges = WZMagicMouseHandle.shared
+        if ges.running {
+            ges.stop()
+            toggleGestureItem.title = NSLocalizedString("Start Gesture", comment: "")
+        } else {
+            ges.start()
+            toggleGestureItem.title = NSLocalizedString("Stop Gesture", comment: "")
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

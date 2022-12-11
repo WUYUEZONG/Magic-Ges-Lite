@@ -56,37 +56,24 @@ class WZMagicMouseHandle {
     
     init() {
         
-//        if let value: Double = UserDefaults.standard.object(for: .longActionDelay) {
-//            becomeLongActionDelay = value
-//        } else {
-//            UserDefaults.standard.set(becomeLongActionDelay, for: .longActionDelay)
-//        }
-        #if DEBUG
-//        clickKeyboard(virtualKey: kVK_UpArrow)
-        #endif
-        #if !DEBUG
-        
-        #endif
         
         state = StateWindow()
         
-//        if let menu = NSApplication.shared.menu {
-//            debugPrint("menu \(menu.items)")
-//            menu.items.removeLast()
-//            debugPrint("menu \(menu.items)")
-//            NSApplication.shared.menu = menu
+//        NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { e in
+//            switch e.type {
+//            case .scrollWheel:
+//                if let delegate = NSApplication.shared.delegate as? AppDelegate {
+//                    if e.locationInWindow.toCGPoint().y - delegate.content.frame.minY < 38 {
+//                        delegate.content.close()
+//                        return nil
+//                    }
+//                }
+//                break
+//            default: break
+//            }
+//            return e
 //        }
-//        
-//        if let helpMenu = NSApplication.shared.helpMenu {
-//            debugPrint("helpMenu \(helpMenu.items)")
-//            helpMenu.setAccessibilityHidden(true)
-//        }
-//        
-//        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-//        if let button = item.button {
-//            button.image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
-//            button.action = #selector(quitApp)
-//        }
+        
     }
     
     
@@ -104,21 +91,17 @@ class WZMagicMouseHandle {
         
         eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel]) { [self] event in
             
-//            debugPrint("is main ? ", Thread.current.isMainThread)
-            
-//            scrollEventWorkItem.cancel()
-            
-            
             
             switch event.type {
             case .scrollWheel:
                 
-                eventWorkItem?.cancel()
-                
-                eventWorkItem = DispatchWorkItem(block: {
-                    self.doScrollWheel(event: event)
-                })
-                eventWorkItem?.perform()
+//                eventWorkItem?.cancel()
+//
+//                eventWorkItem = DispatchWorkItem(block: {
+//                })
+                self.doScrollWheel(event: event)
+//                eventWorkItem?.perform()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: eventWorkItem!)
                 
                 break
             default: break
@@ -127,6 +110,10 @@ class WZMagicMouseHandle {
             
         }
     }
+    
+//    @objc func performEvent() {
+//        eventWorkItem?.perform()
+//    }
     
     func stop() {
         if eventMonitor != nil {
@@ -210,7 +197,7 @@ extension WZMagicMouseHandle {
         
         guard let lists = elements as? [AXUIElement] else  { return nil }
         
-        var windowElement = lists.first {
+        let windowElement = lists.first {
             if let names = $0.attributeNames(), names.contains(NSAccessibility.Attribute.frame.rawValue) {
                 if let value = $0.getValue(.frame) {
                     let value = value as! AXValue
@@ -353,10 +340,12 @@ extension WZMagicMouseHandle {
         case .began, .mayBegin:
             
             self.gestureEnded = false
+            self.changeToHoldGestureWorkItem?.cancel()
+            self.cancelGestureWorkItem?.cancel()
             self.gestureState = .none
             
             focusedWindow = getScrollWheelEventUnderMouseWindow(event: event)
-            if focusedWindow != nil {
+            if let focusedWindow = focusedWindow, focusedWindow.element != nil {
                 
                 self.gestureState = .normal(.none)
                 
@@ -430,6 +419,7 @@ extension WZMagicMouseHandle {
             self.changeToHoldGestureWorkItem?.cancel()
             self.cancelGestureWorkItem?.cancel()
             
+            guard let focusedWindow = focusedWindow, focusedWindow.element != nil else { return }
             
             guard let scrollWhellEvent = scrollWhellEvent else { return }
             

@@ -6,6 +6,12 @@
   
 */
 
+"Donate" = "捐赠";
+"Exit" = "退出";
+"Open Main Window" = "打开界面";
+"Start Gesture" = "启动手势";
+"Stop Gesture" = "停止手势";
+
 "When the mouse hovers over the top of the window, slides down and hold %@ seconds, then trigger gesture for close the window" = "当鼠标悬停于窗口顶部，向下滑动并保持%@秒，将触发关闭窗口";
 "slides down and hold, close the window" = "向下滑动并保持，关闭窗口";
 

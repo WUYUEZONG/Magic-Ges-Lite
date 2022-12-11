@@ -19,7 +19,7 @@ class ContentWindow: NSPanel {
         
         
 //        title = "MG"
-//        titlebarAppearsTransparent = true
+        titlebarAppearsTransparent = true
         
         isReleasedWhenClosed = false
 

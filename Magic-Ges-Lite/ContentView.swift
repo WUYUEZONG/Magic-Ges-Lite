@@ -13,7 +13,7 @@ struct ContentView: View {
     
     
 //    var menus: [MGMenuItem] = [.home, .achievement, .magicMouse, .help, .about]
-    @State var sideBarItems: [MGMenuItem] = [.home, .magicMouse, .about]
+    @State var sideBarItems: [MGMenuItem] = [.home, .magicMouse, .about, .donate]
     
     @State var selectdSideBarItem: MGMenuItem?
 //    @State var selectdMenuOld: MGMenuItem? = Binding(MG)
@@ -26,7 +26,7 @@ struct ContentView: View {
 //            .scaledToFit()
             .onAppear {
                 selectdSideBarItem = .home
-                WZMagicMouseHandle.shared.start()
+
             }
             
     }
@@ -44,6 +44,8 @@ extension ContentView {
             AboutAppView()
         } else if menu == .magicMouse {
             MagicMouseView(selectMenu: $selectdSideBarItem)
+        } else if menu == .donate {
+            DonateView()
         } else {
             BaseSettingView()
         }

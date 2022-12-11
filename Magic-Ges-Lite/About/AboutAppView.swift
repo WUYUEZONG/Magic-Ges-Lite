@@ -63,6 +63,8 @@ struct AboutAppView: View {
                             ThanksItemView(name: "Nickainley-Normal", url: "https://www.dafont.com/nickainley.font")
                             
                         }
+                        
+                        
                     }
                         .padding(.bottom, 20)
                     
@@ -84,5 +86,6 @@ struct AboutAppView: View {
 struct AboutAppView_Previews: PreviewProvider {
     static var previews: some View {
         AboutAppView()
+            .frame(height: 1000)
     }
 }
