@@ -285,54 +285,6 @@ extension WZMagicMouseHandle {
         }
         
         
-//        doScrollWhell(event: event) { e in
-//
-//            switch self.gestureState {
-//            case .normal:
-//                self.setNewFrame(action: .normal(.left), for: e)
-//                break
-//            default: break
-//            }
-//
-//
-//        } up: { e in
-//
-//            switch self.gestureState {
-//            case .normal:
-//                self.setNewFrame(action: .normal(.up), for: e)
-//                break
-//            case .hold:
-//                self.pressFullScreenButton(event: e)
-//                break
-//            default: break
-//            }
-//
-//        } right: { e in
-//
-//            switch self.gestureState {
-//            case .normal:
-//                self.setNewFrame(action: .normal(.right), for: e)
-//                break
-//            default: break
-//            }
-//
-//
-//        } down: { e in
-//
-//            switch self.gestureState {
-//            case .normal:
-//                self.getScrollWheelEventUnderMouseElement(event: e, onMenuBar: nil) { ele, _ in
-//                    self.setAttributeFor(element: ele, attribute: .minimized, value: true as CFBoolean)
-//                }
-//                break
-//            case .hold:
-////                self.pressCloseButton(event: e)
-//                break
-//            default: break
-//            }
-//
-//
-//        }
     }
     
     
@@ -475,7 +427,7 @@ extension WZMagicMouseHandle {
     func countGesture() {
         if let delegate = NSApplication.shared.delegate as? AppDelegate {
             delegate.gestureCounting += 1
-            delegate.countingGestureItem.title = NSLocalizedString("\(delegate.gestureCounting) Gestures", comment: "")
+            delegate.countingGestureItem.title = String(localized: "\(delegate.gestureCounting.formatted()) Gestures")
         }
     }
     

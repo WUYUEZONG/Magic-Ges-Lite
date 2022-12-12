@@ -33,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.image = image
 
         }
-        countingGestureItem.title = String(localized: "\(gestureCounting) Gestures")//NSLocalizedString("\(gestureCounting) Gestures", comment: "") 
+        countingGestureItem.title = String(localized: "\(gestureCounting.formatted()) Gestures") //NSLocalizedString("\(gestureCounting.formatted()) Gestures", comment: "")
         menu.addItem(countingGestureItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(withTitle: NSLocalizedString("Open Main Window", comment: ""), action: #selector(openStatusMenus), keyEquivalent: "o")

@@ -8,7 +8,7 @@
 
 "The touch control panel can also be operated with two fingers. But no complete test has been done yet!" = "妙控触控板同样可以使用双指操作。但暂未做过完整测试！";
 "It will cancel the actions after hold over %@ seconds" = "当长按手势持续超过%@秒后，手势将自动取消";
-"%lld Gestures" = "%lld次";
+"%@ Gestures" = "%@次";
 "Donate" = "捐赠";
 "Exit" = "退出";
 "Open Main Window" = "打开界面";
