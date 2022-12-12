@@ -204,7 +204,10 @@ extension WZMagicMouseHandle {
 //                    kAXValueCGRectType
                     
                     if let frame: CGRect = value.toValue() {
-                        let inFrame = mouseLocation.toCGPoint().y - frame.minY < 38
+                        let loc = mouseLocation.toCGPoint()
+                        let inX = loc.x > frame.minX && loc.x < frame.maxX
+                        let inY = loc.y - frame.minY < 38
+                        let inFrame = inY && inX
                         return frame.equalTo(current.frame) || inFrame
                     }
                     
