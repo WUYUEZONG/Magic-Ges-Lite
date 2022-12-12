@@ -48,19 +48,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         NSApp.activate(ignoringOtherApps: true)
         content.makeKeyAndOrderFront(self)
-        if !AXIsProcessTrusted() {
-            let accessibility = RequestAccessabilityView()
-            let aWindow = NSWindow(contentRect: .zero, styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
-            aWindow.contentView = NSHostingView(rootView: accessibility)
-            aWindow.setFrame(NSRect(origin: .zero, size: aWindow.contentView?.fittingSize ?? CGSize(width: 500, height: 600)), display: true)
-            aWindow.title = "RequestAccessabilityView"
-            aWindow.isReleasedWhenClosed = false
-            aWindow.titlebarAppearsTransparent = true
-            aWindow.titleVisibility = .hidden
-            aWindow.center()
-            aWindow.orderFront(self)
-            
-        }
+//        if !AXIsProcessTrusted() {
+//            let accessibility = RequestAccessabilityView()
+//            let aWindow = NSWindow(contentRect: .zero, styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
+//            aWindow.contentView = NSHostingView(rootView: accessibility)
+//            aWindow.setFrame(NSRect(origin: .zero, size: aWindow.contentView?.fittingSize ?? CGSize(width: 500, height: 600)), display: true)
+//            aWindow.title = "RequestAccessabilityView"
+//            aWindow.isReleasedWhenClosed = false
+//            aWindow.titlebarAppearsTransparent = true
+//            aWindow.titleVisibility = .hidden
+//            aWindow.center()
+//            aWindow.orderFront(self)
+//            
+//        }
         
         
         
