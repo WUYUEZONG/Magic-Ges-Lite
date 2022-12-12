@@ -57,7 +57,7 @@ struct BaseSettingView: View {
             
             HStack {
                 
-                Text("👀 看一下有没有更新：")
+                Text("👀 Check for updates:")
                 
                 Group {
                     Button {
