@@ -16,7 +16,7 @@ struct MagicMouseView: View {
     var body: some View {
         List {
             
-            Text("妙控触控板同样可以使用双指操作。但暂未做过完整测试！")
+            Text("The touch control panel can also be operated with two fingers. But no complete test has been done yet!")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundColor(Color.accentColor)
