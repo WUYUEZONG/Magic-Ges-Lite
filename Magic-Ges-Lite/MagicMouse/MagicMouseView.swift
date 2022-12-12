@@ -108,7 +108,7 @@ struct MagicMouseView: View {
                     }
                     .buttonStyle(.link)
                     .onHover { isOn in
-                        isOn ? NSCursor.openHand.push() : NSCursor.pop()
+                        isOn ? NSCursor.pointingHand.push() : NSCursor.pop()
                     }
 
                 }

@@ -28,6 +28,14 @@ struct AboutAppView: View {
                                 .font(.title)
                             Text("Help you use the mouse management window more conveniently")
                                 .font(.callout)
+//                        https://wuyuezong.github.io/apps/magic-gesture/
+                            Button {
+                                HalfFish.openURLWith("https://wuyuezong.github.io/apps/magic-gesture/")
+                            } label: {
+                                Image(systemName: .link_icon)
+                            }
+                            .buttonStyle(.link)
+//                            ThanksItemView(name: "详细介绍", url: "https://wuyuezong.github.io/apps/magic-gesture/")
                         }
                         
                         VStack {

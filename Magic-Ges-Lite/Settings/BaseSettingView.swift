@@ -53,6 +53,41 @@ struct BaseSettingView: View {
             }
             
             
+            Divider()
+            
+            HStack {
+                
+                Text("👀 看一下有没有更新：")
+                
+                Group {
+                    Button {
+                        HalfFish.openURLWith("https://github.com/WUYUEZONG/MagicGesturePackage/releases")
+                    } label: {
+                        HStack {
+                            Text("GitHub")
+                            Image(systemName: .link_icon)
+                        }
+                    }
+                    .padding(.trailing, 15)
+                    
+                    Button {
+                        HalfFish.openURLWith("https://gitee.com/rn-wyz/MagicGesturePackage/releases")
+                    } label: {
+                        HStack {
+                            Text("Gitee")
+                            Image(systemName: .link_icon)
+                        }
+                    }
+                }
+                .onHover(perform: { isOn in
+                    isOn ? NSCursor.pointingHand.push() : NSCursor.pop()
+                })
+                .buttonStyle(.link)
+            }
+            
+            
+            
+            
         }
         .navigationTitle("Settings")
         .onAppear {
