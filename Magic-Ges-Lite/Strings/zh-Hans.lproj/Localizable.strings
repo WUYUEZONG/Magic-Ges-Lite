@@ -35,7 +35,7 @@
 
 "Basic Settings" = "基础设置";
 "Gesture Parameter Adjustment" = "手势参数调整";
-"Long press the gesture to start the delay time" = "长按手势出发延时时间";
+"Long press the gesture to start the delay time" = "长按手势触发延时时间";
 
 "When you make a sliding gesture, do not release it. After a certain period of time, the gesture will become a long press gesture. See the gesture column for more details." = "当做出滑动手势后，不松开，一定时间后该手势会变为长按手势，更多详情查看手势一栏。";
 

@@ -29,7 +29,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         WZMagicMouseHandle.shared.start()
         
         if let button = statusItem.button {
-            let image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
+            let image = NSImage(named: "logo32")
+            //NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
             button.image = image
 
         }

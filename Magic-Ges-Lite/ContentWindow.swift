@@ -15,7 +15,7 @@ class ContentWindow: NSPanel {
     init() {
         
         
-        super.init(contentRect: CGRect(x: 0, y: 0, width: 700, height: 450), styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView], backing: .buffered, defer: false)
+        super.init(contentRect: CGRect(x: 0, y: 0, width: 700, height: 450), styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
         
         
 //        title = "MG"
