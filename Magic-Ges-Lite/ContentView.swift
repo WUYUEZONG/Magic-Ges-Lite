@@ -11,23 +11,13 @@ import SwiftUI
 
 struct ContentView: View {
     
-    
-//    var menus: [MGMenuItem] = [.home, .achievement, .magicMouse, .help, .about]
     @State var sideBarItems: [MGMenuItem] = [.home, .magicMouse, .about, .donate]
     
-    @State var selectdSideBarItem: MGMenuItem?
-//    @State var selectdMenuOld: MGMenuItem? = Binding(MG)
-    
-//    var open: () = WZMagicMouseHandle.shared.start()
-    
+    @StateObject private var selectedItem = SideBarSeleted()
     
     var body: some View {
         contentBody()
-//            .scaledToFit()
-            .onAppear {
-                selectdSideBarItem = .home
-
-            }
+            .environmentObject(selectedItem)
             
     }
 }
@@ -43,7 +33,7 @@ extension ContentView {
         } else if menu == .about {
             AboutAppView()
         } else if menu == .magicMouse {
-            MagicMouseView(selectMenu: $selectdSideBarItem)
+            MagicMouseView()
         } else if menu == .donate {
             DonateView()
         } else {
@@ -73,45 +63,38 @@ extension ContentView {
     @ViewBuilder
     func contentBody() -> some View {
         if #available(macOS 13, *){
-            
             NavigationSplitView {
-                List(sideBarItems, id: \.id, selection: $selectdSideBarItem) { item in
+                List(sideBarItems, id: \.id, selection: $selectedItem.item) { item in
                     NavigationLink(value: item) {
                         navlinkLabel(item: item)
                             .keyboardShortcut(KeyEquivalent(item.keyboardShortCut))
                     }
-
                 }
-                .padding(.top, 20)
+//                .padding(.top, 20)
                 .listStyle(.sidebar)
 
             } detail: {
 
-                detailView(selectdSideBarItem)
+                detailView(selectedItem.item)
                     .frame(minWidth: 400)
             }
-
         } else {
             NavigationView {
                 
                 List(sideBarItems, id: \.id) { item in
-                    
-                    NavigationLink(tag: item, selection: $selectdSideBarItem) {
-                        detailView(selectdSideBarItem)
+                    NavigationLink(tag: item, selection: $selectedItem.itemOrNil) {
+                        detailView(selectedItem.itemOrNil)
                             .frame(minWidth: 400)
                     } label: {
                         navlinkLabel(item: item)
                     }
                 }
+//                .padding(.top, 20)
                 .listStyle(.sidebar)
+                
             }
+
         }
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//            .environment(\.locale, Locale(identifier: "en"))
-//    }
-//}

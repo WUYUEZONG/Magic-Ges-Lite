@@ -38,7 +38,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.image = image
 
         }
-        countingGestureItem.title = String(localized: "\(gestureCounting.formatted()) Gestures") //NSLocalizedString("\(gestureCounting.formatted()) Gestures", comment: "")
+        
+        countingGestureItem.title = .gestureCounting(gestureCounting)
+        
         menu.addItem(countingGestureItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(withTitle: NSLocalizedString("Open Main Window", comment: ""), action: #selector(openStatusMenus), keyEquivalent: "o")
@@ -93,7 +95,7 @@ extension AppDelegate {
 
 extension AppDelegate {
     
-    func setAXNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(openStatusMenus), name: .NSApplicationProtectedDataDidBecomeAvailable, object: nil)
-    }
+//    func setAXNotification() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(openStatusMenus), name: .NSApplicationProtectedDataDidBecomeAvailable, object: nil)
+//    }
 }

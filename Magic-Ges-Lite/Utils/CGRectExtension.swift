@@ -62,3 +62,33 @@ extension CGRect {
     
     
 }
+
+
+extension Int {
+    
+    func format() -> String {
+        
+        if #available(macOS 12.0, *) {
+            return self.formatted()
+        } else {
+            return self.description
+        }
+    }
+    
+}
+
+extension Double {
+    
+    func format(_ dotInt: Int = 0) -> String {
+        
+        if #available(macOS 12.0, *) {
+            return self.formatted()
+        } else {
+            let format = "%.\(dotInt)f"
+            return String(format: format, self)
+        }
+    }
+    
+}
+
+

@@ -9,9 +9,10 @@ import SwiftUI
 
 struct MagicMouseView: View {
     
-    @AppStorage(UserDefaults.UserKey.longActionDelay.rawValue) var delayTime: Double = 0.4
+    @AppStorage(UserDefaults.UserKey.longActionDelay.rawValue) private var delayTime: Double = 0.4
     
-    @Binding var selectMenu: MGMenuItem?
+//    @Binding var selectMenu: MGMenuItem?
+    @EnvironmentObject var selectedItem: SideBarSeleted
     
     var body: some View {
         List {
@@ -42,7 +43,7 @@ struct MagicMouseView: View {
             HStack {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundColor(Color.yellow)
-                Text("It will cancel the actions after hold over \(WZMagicMouseHandle.shared.getCancelActionDelay().formatted()) seconds")
+                Text("It will cancel the actions after hold over \(WZMagicMouseHandle.shared.getCancelActionDelay().format(1)) seconds")
                     .font(.headline)
                     .fontWeight(.bold)
                     
@@ -102,7 +103,8 @@ struct MagicMouseView: View {
                     Text("The gesture triggered by letting go after sliding and waiting for \(delayString) seconds")
                     Button {
 
-                        $selectMenu.wrappedValue = .home
+//                        $selectMenu.wrappedValue = .home
+                        selectedItem.updateItem(.home)
                         
                     } label: {
                         Text("delay time setting")
@@ -126,13 +128,13 @@ struct MagicMouseView: View {
 
 extension MagicMouseView {
     var delayString : String {
-        delayTime.formatted()
+        delayTime.format(1)
     }
 }
 
 struct MagicMouseView_Previews: PreviewProvider {
     static var previews: some View {
-        MagicMouseView(selectMenu: .constant(.home))
+        MagicMouseView()
             .environment(\.locale, Locale(identifier: "en"))
             .frame(height: 1000)
     }

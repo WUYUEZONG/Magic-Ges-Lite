@@ -94,5 +94,13 @@ extension String {
         }
         return "1.0"
     }
+    
+    static func gestureCounting(_ count: Int) -> String {
+        if #available(macOS 12, *) {
+            return String(localized: "\(count.format()) Gestures")
+        } else {
+            return String(format: "%ld%@", count,NSLocalizedString("Gestures", comment: ""))
+        }
+    }
 }
 

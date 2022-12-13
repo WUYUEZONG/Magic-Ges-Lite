@@ -23,7 +23,7 @@ struct DonateView: View {
                     .aspectRatio(contentMode: .fit)
             }
         }
-        .listStyle(.sidebar)
+//        .listStyle(.sidebar)
     }
 }
 

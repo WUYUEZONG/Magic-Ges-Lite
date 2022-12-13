@@ -8,6 +8,20 @@
 import Foundation
 import SwiftUI
 
+class SideBarSeleted: ObservableObject {
+    
+    @Published var item: MGMenuItem = .home
+    @Published var itemOrNil: MGMenuItem? = .home
+    
+    func updateItem(_ item: MGMenuItem = .home) {
+        if #available(macOS 13, *) {
+            self.item = item
+        } else {
+            self.itemOrNil = item
+        }
+    }
+}
+
 struct MGMenuItem : Hashable, Identifiable {
     
     func hash(into hasher: inout Hasher) {
@@ -24,6 +38,8 @@ struct MGMenuItem : Hashable, Identifiable {
     let name: LocalizedStringKey
     let image: String
     let keyboardShortCut: Character
+    
+    
     
 }
 

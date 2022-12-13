@@ -430,7 +430,7 @@ extension WZMagicMouseHandle {
     func countGesture() {
         if let delegate = NSApplication.shared.delegate as? AppDelegate {
             delegate.gestureCounting += 1
-            delegate.countingGestureItem.title = String(localized: "\(delegate.gestureCounting.formatted()) Gestures")
+            delegate.countingGestureItem.title = .gestureCounting(delegate.gestureCounting)
         }
     }
     

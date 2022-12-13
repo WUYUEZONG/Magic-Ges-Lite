@@ -92,6 +92,7 @@ struct BaseSettingView: View {
         .navigationTitle("Settings")
         .onAppear {
             sensitivitySlideValue = WZMagicMouseHandle.shared.sensitivity
+            longActionStepValue = WZMagicMouseHandle.shared.becomeLongActionDelay
         }
         
     }
@@ -156,7 +157,7 @@ extension BaseSettingView {
 //                        Spacer(minLength: 100)
             
             Stepper {
-                Text("\(longActionStepValue.formatted()) seconds")
+                Text("\(longActionStepValue.format(1)) seconds")
             } onIncrement: {
                 incrementStep()
             } onDecrement: {
@@ -252,5 +253,6 @@ struct BaseSettingView_Previews: PreviewProvider {
     static var previews: some View {
         BaseSettingView()
             .environment(\.locale, Locale(identifier: "en"))
+//            .environment(\.ma, <#T##value: V##V#>)
     }
 }
