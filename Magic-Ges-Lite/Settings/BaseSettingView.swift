@@ -93,9 +93,7 @@ struct BaseSettingView: View {
         .onAppear {
             sensitivitySlideValue = WZMagicMouseHandle.shared.sensitivity
         }
-        .onPreferenceChange { value in
-            
-        }
+        
     }
 }
 

@@ -38,6 +38,8 @@
 		887269502944BB0300B40B52 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269472944BB0300B40B52 /* CGRectExtension.swift */; };
 		887269512944BB0300B40B52 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887269482944BB0300B40B52 /* UserDefaults.swift */; };
 		8872695429459FF500B40B52 /* DonateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8872695329459FF500B40B52 /* DonateView.swift */; };
+		CCC455DB294857000094C04D /* AchievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC455DA294857000094C04D /* AchievementView.swift */; };
+		CCC455E029485A740094C04D /* GestureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC455DF29485A740094C04D /* GestureModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +77,8 @@
 		887269472944BB0300B40B52 /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		887269482944BB0300B40B52 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		8872695329459FF500B40B52 /* DonateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonateView.swift; sourceTree = "<group>"; };
+		CCC455DA294857000094C04D /* AchievementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementView.swift; sourceTree = "<group>"; };
+		CCC455DF29485A740094C04D /* GestureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,7 @@
 				8872693C29449A0500B40B52 /* ContentWindow.swift */,
 				8872693A294497CB00B40B52 /* ContentView.swift */,
 				8872691A2944943600B40B52 /* MenuItem.swift */,
+				CCC455D9294856D60094C04D /* Achievement */,
 				8872695229459FB400B40B52 /* Donate */,
 				887269082944943500B40B52 /* About */,
 				8872690B2944943500B40B52 /* Fonts */,
@@ -214,6 +219,15 @@
 				8872695329459FF500B40B52 /* DonateView.swift */,
 			);
 			path = Donate;
+			sourceTree = "<group>";
+		};
+		CCC455D9294856D60094C04D /* Achievement */ = {
+			isa = PBXGroup;
+			children = (
+				CCC455DA294857000094C04D /* AchievementView.swift */,
+				CCC455DF29485A740094C04D /* GestureModel.swift */,
+			);
+			path = Achievement;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -340,6 +354,8 @@
 				887269322944943600B40B52 /* LocalizeExtensions.swift in Sources */,
 				8872692D2944943600B40B52 /* StateWindow.swift in Sources */,
 				887269502944BB0300B40B52 /* CGRectExtension.swift in Sources */,
+				CCC455E029485A740094C04D /* GestureModel.swift in Sources */,
+				CCC455DB294857000094C04D /* AchievementView.swift in Sources */,
 				8872692A2944943600B40B52 /* AboutAppView.swift in Sources */,
 				887269332944943600B40B52 /* MenuItem.swift in Sources */,
 				8872692B2944943600B40B52 /* FontExtension.swift in Sources */,

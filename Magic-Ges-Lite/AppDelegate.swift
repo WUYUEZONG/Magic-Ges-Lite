@@ -24,13 +24,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
+        setup()
+     
+    }
+    
+    func setup() {
         
         NSApplication.shared.setActivationPolicy(.accessory)
         WZMagicMouseHandle.shared.start()
-        
+
         if let button = statusItem.button {
             let image = NSImage(named: "logo32")
-            //NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
             button.image = image
 
         }
@@ -45,15 +49,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(toggleGestureItem)
         menu.addItem(withTitle: NSLocalizedString("Exit", comment: ""), action: #selector(quitApp), keyEquivalent: "q")
         statusItem.menu = menu
-        
+
         NSApp.activate(ignoringOtherApps: true)
         content.makeKeyAndOrderFront(self)
-        
-        
-        
-     
     }
     
+    
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return true
+    }
+
+
+}
+
+extension AppDelegate {
     @objc func openStatusMenus() {
         NSApp.activate(ignoringOtherApps: true)
         content.makeKeyAndOrderFront(self)
@@ -74,15 +88,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             toggleGestureItem.title = NSLocalizedString("Stop Gesture", comment: "")
         }
     }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
-
-    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
-        return true
-    }
-
-
 }
 
+
+extension AppDelegate {
+    
+    func setAXNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(openStatusMenus), name: .NSApplicationProtectedDataDidBecomeAvailable, object: nil)
+    }
+}
