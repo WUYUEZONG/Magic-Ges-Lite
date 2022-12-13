@@ -36,8 +36,16 @@ class StateWindow: NSPanel {
             let o = NSPoint(x: p.x - StateWindow.contentFrame.width / 2, y: p.y -  StateWindow.contentFrame.height / 2 )
             self.setFrame(NSRect(origin: o, size: self.frame.size), display: true)
             orderFront(self)
-         
-            NSCursor.setHiddenUntilMouseMoves(true)
+        
+            let item = DispatchWorkItem {
+                NSCursor.setHiddenUntilMouseMoves(true)
+            }
+//            DispatchQueue.main.async {
+//                NSCursor.setHiddenUntilMouseMoves(true)
+//            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: item)
+            
 //            NSCursor.hide()
         }
         
@@ -52,7 +60,7 @@ class StateWindow: NSPanel {
     
     func hide(immediately: Bool = false) {
         
-        NSCursor.setHiddenUntilMouseMoves(false)
+//        NSCursor.setHiddenUntilMouseMoves(false)
 //        NSCursor.unhide()
 //        NSCursor.pop()
         
@@ -81,7 +89,7 @@ class StateWindow: NSPanel {
         
         ignoresMouseEvents = true
         
-        title = "Status"
+//        title = "Status"
         
         isOpaque = false
         level = .statusBar

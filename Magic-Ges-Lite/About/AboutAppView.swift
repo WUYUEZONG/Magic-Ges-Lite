@@ -86,7 +86,7 @@ struct AboutAppView: View {
             }
         }
         .navigationTitle("About")
-        .listStyle(.sidebar)
+//        .listStyle(.sidebar)
     }
 }
 

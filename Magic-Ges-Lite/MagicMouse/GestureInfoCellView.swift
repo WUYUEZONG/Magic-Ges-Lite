@@ -37,7 +37,7 @@ struct GestureInfoCellView_Previews: PreviewProvider {
     static var previews: some View {
         GestureInfoCellView(imageName: .down_minmize,
                             tintColor: .yellow,
-                            title: "当鼠标悬停于窗口顶部，向下快速滑动，触发窗口最小化",
+                            title: "当鼠标悬停于窗口顶部，向下快速滑动，触发窗口最小化, 当鼠标悬停于窗口顶部，向下快速滑动，触发窗口最小化",
                             detail: "当鼠标悬停于窗口顶部，向下快速滑动，触发窗口最小化")
     }
 }

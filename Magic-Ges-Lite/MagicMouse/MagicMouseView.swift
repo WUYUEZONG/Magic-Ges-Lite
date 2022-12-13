@@ -20,6 +20,7 @@ struct MagicMouseView: View {
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundColor(Color.accentColor)
+//                .fixedSize()
             
             HStack {
                 Spacer()
@@ -118,7 +119,7 @@ struct MagicMouseView: View {
             // 在窗口导航栏位置向下滑动
         }
         .navigationTitle("Maigc Mouse")
-        .listStyle(.sidebar)
+//        .listStyle(.plain)
         
     }
 }
