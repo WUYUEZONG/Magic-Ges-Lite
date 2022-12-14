@@ -7,4 +7,4 @@
 */
 
 CFBundleName = "窗口手势";
-CFBundleDisplayName = "窗口手势";
+//CFBundleDisplayName = "窗口手势";

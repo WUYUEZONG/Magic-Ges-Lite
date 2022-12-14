@@ -58,21 +58,7 @@ class WZMagicMouseHandle {
         
         
         state = StateWindow()
-        
-//        NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { e in
-//            switch e.type {
-//            case .scrollWheel:
-//                if let delegate = NSApplication.shared.delegate as? AppDelegate {
-//                    if e.locationInWindow.toCGPoint().y - delegate.content.frame.minY < 38 {
-//                        delegate.content.close()
-//                        return nil
-//                    }
-//                }
-//                break
-//            default: break
-//            }
-//            return e
-//        }
+//
         
     }
     
@@ -87,24 +73,18 @@ class WZMagicMouseHandle {
         
         debugPrint("eventMonitor set")
         
-//        NSApp.setActivationPolicy(.accessory)
         
-        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel]) { [self] event in
+        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel, .smartMagnify, .directTouch]) { [self] event in
             
             
             switch event.type {
             case .scrollWheel:
-                
-//                eventWorkItem?.cancel()
-//
-//                eventWorkItem = DispatchWorkItem(block: {
-//                })
+//                isDirectionInvertedFromDevice
                 self.doScrollWheel(event: event)
-//                eventWorkItem?.perform()
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: eventWorkItem!)
-                
                 break
-            default: break
+            default:
+                debugPrint(event.description)
+                break
             }
             
             
@@ -181,7 +161,7 @@ extension WZMagicMouseHandle {
 //        let statusY = main.visibleFrame.maxY
 //        let dockY = main.visibleFrame.minY
         
-        let screenWindows = WindowUtil.getOnScreenWindows(CGWindowID(event.windowNumber))
+        let screenWindows = WindowUtil.getOnScreenWindows()
         let current = screenWindows[event.windowNumber]
         debugPrint(screenWindows)
         debugPrint("\(event.windowNumber)")
@@ -193,36 +173,54 @@ extension WZMagicMouseHandle {
         
         let application = AXUIElementCreateApplication(current.pid)
         
-        guard let elements = application.getValue(.windows) else { return nil }
-        
-        guard let lists = elements as? [AXUIElement] else  { return nil }
-        
-        let windowElement = lists.first {
-            if let names = $0.attributeNames(), names.contains(NSAccessibility.Attribute.frame.rawValue) {
-                if let value = $0.getValue(.frame) {
-                    let value = value as! AXValue
-//                    kAXValueCGRectType
-                    
-                    if let frame: CGRect = value.toValue() {
-                        let loc = mouseLocation.toCGPoint()
-                        let inX = loc.x > frame.minX && loc.x < frame.maxX
-                        let inY = loc.y - frame.minY < 38
-                        let inFrame = inY && inX
-                        return frame.equalTo(current.frame) || inFrame
-                    }
-                    
-                    
-                }
+        let element = UnsafeMutablePointer<AXUIElement?>.allocate(capacity: 1)
+        let copyError = AXUIElementCopyElementAtPosition(application, Float(mouseLocation.toCGPoint().x), Float(mouseLocation.toCGPoint().y), element)
+        if copyError == .success {
+            
+            guard let elementAtPosition = element.pointee else { return nil }
+            
+            if elementAtPosition.isWindow {
+                current.element = elementAtPosition
+                debugPrint(elementAtPosition.getValue(.frame).debugDescription)
+            } else {
+                guard let eleWindow = elementAtPosition.getValue(.window) else { return nil }
+                let ew = eleWindow as! AXUIElement
+                current.element = ew
+                debugPrint(ew.getValue(.frame).debugDescription)
             }
-            return false
+            
+            return current
+        } else {
+            debugPrint("AXUIElementCopyElementAtPosition", copyError.rawValue)
+            return nil
         }
         
-//        if windowElement == nil && lists.count == 1 {
-//            windowElement = lists.first!
+//        guard let elements = application.getValue(.windows) else { return nil }
+//
+//        guard let lists = elements as? [AXUIElement] else  { return nil }
+//
+//        let windowElement = lists.first {
+//            if let names = $0.attributeNames(), names.contains(NSAccessibility.Attribute.frame.rawValue) {
+//                if let value = $0.getValue(.frame) {
+//                    let value = value as! AXValue
+////                    kAXValueCGRectType
+//
+//                    if let frame: CGRect = value.toValue() {
+//                        let loc = mouseLocation.toCGPoint()
+//                        let inX = loc.x > frame.minX && loc.x < frame.maxX
+//                        let inY = loc.y - frame.minY < 38
+//                        let inFrame = inY && inX
+//                        return frame.equalTo(current.frame) || inFrame
+//                    }
+//
+//
+//                }
+//            }
+//            return false
 //        }
-        
-        current.element = windowElement
-        return current
+//
+//        current.element = windowElement
+//        return current
     }
     
     
@@ -452,11 +450,20 @@ extension WZMagicMouseHandle {
         } else {
             if event.deltaY < 0 {
                 
-                return (.up, event)
+                if event.isDirectionInvertedFromDevice {
+                    return (.up, event)
+                } else {
+                    return (.down, event)
+                }
+                
                 
             } else {
                 
-                return (.down,event)
+                if event.isDirectionInvertedFromDevice {
+                    return (.down, event)
+                } else {
+                    return (.up, event)
+                }
             }
         }
     }

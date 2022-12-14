@@ -7,5 +7,5 @@
 */
 
 CFBundleName = "Magic Gesture";
-CFBundleDisplayName = "Magic Gesture";
+//CFBundleDisplayName = "Magic Gesture";
 
