@@ -17,6 +17,8 @@ struct BaseSettingView: View {
     @State var longActionStepValue: Double = 0.4
     @State var sensitivitySlideValue: Double = 0.2
     
+    @AppStorage(UserDefaults.UserKey.stateHudByMouse.rawValue) var stateHudByMouse: Bool = false
+    
     var body: some View {
         List {
             
@@ -24,7 +26,7 @@ struct BaseSettingView: View {
                 Group {
                     accessabilityItemView
                     
-                    Divider()
+//                    Divider()
                     
                     launchAtLoginItemView
                 }
@@ -35,13 +37,13 @@ struct BaseSettingView: View {
                 Text("Basic Settings")
             }
             
-            Divider()
+//            Divider()
             
             Section {
                 Group {
                     longHoldItemView
                     
-                    Divider()
+//                    Divider()
                     
                     sensitivityItemView
                     
@@ -52,37 +54,32 @@ struct BaseSettingView: View {
                 Text("Gesture Parameter Adjustment")
             }
             
+//            Divider()
             
-            Divider()
-            
-            HStack {
-                
-                Text("👀 Check for updates:")
-                
-                Group {
-                    Button {
-                        HalfFish.openURLWith("https://github.com/WUYUEZONG/MagicGesturePackage/releases")
-                    } label: {
-                        HStack {
-                            Text("GitHub")
-                            Image(systemName: .link_icon)
+            Section {
+                Toggle(isOn: $stateHudByMouse) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 8.0) {
+                            Text("操作提示跟随鼠标")
+                                .font(.headline)
+                            Text("如果开启，操作提示将跟随鼠标，否则固定在屏幕中心偏上边缘位置而且更大。")
+                                .tipFont()
                         }
-                    }
-                    .padding(.trailing, 15)
-                    
-                    Button {
-                        HalfFish.openURLWith("https://gitee.com/rn-wyz/MagicGesturePackage/releases")
-                    } label: {
-                        HStack {
-                            Text("Gitee")
-                            Image(systemName: .link_icon)
-                        }
+                        Spacer()
                     }
                 }
-                .onHover(perform: { isOn in
-                    isOn ? NSCursor.pointingHand.push() : NSCursor.pop()
-                })
-                .buttonStyle(.link)
+                .toggleStyle(.switch)
+            } header: {
+                Text("HUD")
+            }
+            
+            
+//            Divider()
+            
+            Section {
+                CheckUpdateView()
+            } header: {
+                Text("Other")
             }
             
             
@@ -253,6 +250,41 @@ struct BaseSettingView_Previews: PreviewProvider {
     static var previews: some View {
         BaseSettingView()
             .environment(\.locale, Locale(identifier: "en"))
+            .frame(height: 1000)
 //            .environment(\.ma, <#T##value: V##V#>)
+    }
+}
+
+struct CheckUpdateView: View {
+    var body: some View {
+        HStack {
+            
+            Text("👀 Check for updates:")
+            
+            Group {
+                Button {
+                    HalfFish.openURLWith("https://github.com/WUYUEZONG/MagicGesturePackage/releases")
+                } label: {
+                    HStack {
+                        Text("GitHub")
+                        Image(systemName: .link_icon)
+                    }
+                }
+                .padding(.trailing, 15)
+                
+                Button {
+                    HalfFish.openURLWith("https://gitee.com/rn-wyz/MagicGesturePackage/releases")
+                } label: {
+                    HStack {
+                        Text("Gitee")
+                        Image(systemName: .link_icon)
+                    }
+                }
+            }
+            .onHover(perform: { isOn in
+                isOn ? NSCursor.pointingHand.push() : NSCursor.pop()
+            })
+            .buttonStyle(.link)
+        }
     }
 }

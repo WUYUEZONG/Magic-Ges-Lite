@@ -11,7 +11,7 @@ import SwiftUI
 
 class StateWindow: NSPanel {
     
-    static var positionStateHUD = true
+    @AppStorage(UserDefaults.UserKey.stateHudByMouse.rawValue) static var stateHudByMouse = false
     
     private let imageView = NSImageView()
     
@@ -31,18 +31,19 @@ class StateWindow: NSPanel {
         
         self.imageView.layer?.backgroundColor = action.style.bg.cgColor
         self.imageView.contentTintColor = action.style.tint
+        self.imageView.symbolConfiguration = symbolConfiguration
         self.imageView.image = image
-        if (!positionStateHUD) {
+        if (stateHudByMouse) {
             let p = NSEvent.mouseLocation
             let o = NSPoint(x: p.x - StateWindow.contentFrame.width / 2, y: p.y -  StateWindow.contentFrame.height / 2 )
-            self.setFrame(NSRect(origin: o, size: self.frame.size), display: true)
+            self.setFrame(NSRect(origin: o, size: StateWindow.contentFrame.size), display: true)
         } else {
             let x = NSScreen.main!.frame.width / 2 - self.frame.width / 2
             let y = NSScreen.main!.frame.height - 25 - self.frame.height - 80
-            self.setFrame(NSRect(origin: CGPoint(x: x, y: y), size: self.frame.size), display: true)
+            self.setFrame(NSRect(origin: CGPoint(x: x, y: y), size: StateWindow.contentFrame.size), display: true)
         }
         if !self.isShowing {
-            self.alphaValue = positionStateHUD ? 0.9 : 1
+            self.alphaValue = stateHudByMouse ? 1 : 0.9
             orderFront(self)
         }
         
@@ -96,8 +97,7 @@ class StateWindow: NSPanel {
         
         imageView.image = NSImage(systemSymbolName: "opticaldiscdrive.fill", accessibilityDescription: nil)
         imageView.contentTintColor = .systemBlue
-        let pointSize: CGFloat = positionStateHUD ? 100 : 25
-        imageView.symbolConfiguration = NSImage.SymbolConfiguration(pointSize: pointSize, weight: .regular)
+        imageView.symbolConfiguration = symbolConfiguration
 
         imageView.wantsLayer = true
         imageView.frame = StateWindow.contentFrame
@@ -108,11 +108,16 @@ class StateWindow: NSPanel {
         orderFront(self)
     }
     
-    var positionStateHUD: Bool {
-        StateWindow.positionStateHUD
+    var symbolConfiguration: NSImage.SymbolConfiguration {
+        let pointSize: CGFloat = stateHudByMouse ? 25 : 100
+        return NSImage.SymbolConfiguration(pointSize: pointSize, weight: .regular)
+    }
+    
+    var stateHudByMouse: Bool {
+        StateWindow.stateHudByMouse
     }
     
     static var contentFrame: NSRect {
-        return  positionStateHUD ? NSRect(x: 0, y: 0, width: 200, height: 140) : NSRect(x: 0, y: 0, width: 50, height: 40)
+        return  stateHudByMouse ?  NSRect(x: 0, y: 0, width: 50, height: 40) : NSRect(x: 0, y: 0, width: 200, height: 140)
     }
 }

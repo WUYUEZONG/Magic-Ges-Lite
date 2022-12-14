@@ -13,7 +13,7 @@ extension UserDefaults {
         case longActionDelay = "WZMagicMouseHandle.UserKeys.longActionDelay"
         case sensitivity = "WZMagicMouseHandle.UserKeys.sensitivity"
         case gestureCount = "WZMagicMouseHandle.UserKeys.gestureCount"
-        
+        case stateHudByMouse = "WZMagicMouseHandle.UserKeys.stateHudByMouse"
     }
     
     func object(for key: UserKey) -> Double? {
