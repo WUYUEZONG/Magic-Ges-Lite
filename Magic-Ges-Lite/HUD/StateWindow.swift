@@ -49,7 +49,7 @@ class StateWindow: NSPanel {
         
         
         if needHide {
-            self.hide(immediately: action == .hold(.up))
+            self.hide(immediately: action == .hold(.up) || action == .hold(.down))
         }
         
     }
