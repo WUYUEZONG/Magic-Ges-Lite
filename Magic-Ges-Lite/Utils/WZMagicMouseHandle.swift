@@ -74,7 +74,7 @@ class WZMagicMouseHandle {
         debugPrint("eventMonitor set")
         
         
-        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel, .smartMagnify, .directTouch]) { [self] event in
+        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel]) { [self] event in
             
             
             switch event.type {
