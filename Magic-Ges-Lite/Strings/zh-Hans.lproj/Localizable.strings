@@ -6,6 +6,10 @@
   
 */
 
+"Other" = "其他";
+"Operation tips follow the mouse" = "操作提示跟随鼠标";
+"If it is enabled, the operation prompt will follow the mouse, otherwise it will be fixed at the upper edge of the screen center and larger." = "如果开启，操作提示将跟随鼠标，否则固定在屏幕中心偏上边缘位置而且更大。";
+
 "👀 Check for updates:" = "👀 看一下有没有更新：";
 
 "Go settings" = "去开启";

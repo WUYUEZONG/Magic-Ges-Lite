@@ -60,9 +60,9 @@ struct BaseSettingView: View {
                 Toggle(isOn: $stateHudByMouse) {
                     HStack {
                         VStack(alignment: .leading, spacing: 8.0) {
-                            Text("操作提示跟随鼠标")
+                            Text("Operation tips follow the mouse")
                                 .font(.headline)
-                            Text("如果开启，操作提示将跟随鼠标，否则固定在屏幕中心偏上边缘位置而且更大。")
+                            Text("If it is enabled, the operation prompt will follow the mouse, otherwise it will be fixed at the upper edge of the screen center and larger.")
                                 .tipFont()
                         }
                         Spacer()
