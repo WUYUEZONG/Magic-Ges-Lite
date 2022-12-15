@@ -113,6 +113,15 @@ extension AXUIElement {
         return nil
     }
     
+    func actions() -> [NSAccessibility.Action]? {
+        var actions: CFArray?
+        if AXUIElementCopyActionNames(self, &actions) == .success {
+            return actions as? [NSAccessibility.Action]
+        }
+        return nil
+        
+    }
+    
     func role() -> NSAccessibility.Role? {
         guard let role = getValue(.role) else { return nil }
         return role as? NSAccessibility.Role

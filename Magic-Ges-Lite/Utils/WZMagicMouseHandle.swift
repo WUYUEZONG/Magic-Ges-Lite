@@ -192,6 +192,9 @@ extension WZMagicMouseHandle {
             return current
         } else {
             debugPrint("AXUIElementCopyElementAtPosition", copyError.rawValue)
+//            /System/Applications/Mission Control.app
+//            openMissionControlApp()
+            openAppAllWindows()
             return nil
         }
         
@@ -473,6 +476,33 @@ extension WZMagicMouseHandle {
 
 
 extension WZMagicMouseHandle {
+    
+    func openAppAllWindows() {
+        guard let menuBarOwningApplication = NSWorkspace.shared.menuBarOwningApplication else {
+            return
+        }
+        if menuBarOwningApplication.activate(options: .activateAllWindows) {
+            debugPrint("activateAllWindows")
+        }
+        NSWorkspace.shared.hideOtherApplications()
+        
+//        if let appUrl = NSWorkspace.shared.urlForApplication(withBundleIdentifier: menuBarOwningApplication.bundleIdentifier!) {
+//            let config = NSWorkspace.OpenConfiguration()
+//            config.activates = true
+//            NSWorkspace.shared.open(appUrl, configuration: config)
+//        }
+        
+        
+    }
+    
+    func openMissionControlApp() {
+//        NSWorkspace.shared.open(<#T##url: URL##URL#>)
+        if let expose = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.exposelauncher") {
+            if NSWorkspace.shared.open(expose) {
+                
+            }
+        }
+    }
     
     func setAttributeFor(element: AXUIElement, attribute: NSAccessibility.Attribute, value: AnyObject) {
   
