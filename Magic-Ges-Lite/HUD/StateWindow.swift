@@ -63,7 +63,7 @@ class StateWindow: NSPanel {
         if !isShowing {
            return
         }
-        
+
 
         if immediately {
             self.animator().alphaValue = 0
@@ -74,14 +74,14 @@ class StateWindow: NSPanel {
             }))
 
         }
+        
     }
     
     
     init() {
         
         
-        super.init(contentRect: StateWindow.contentFrame, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-        
+        super.init(contentRect: StateWindow.contentFrame, styleMask: [.nonactivatingPanel, .fullSizeContentView], backing: .buffered, defer: false)
         
         
         ignoresMouseEvents = true
@@ -92,10 +92,13 @@ class StateWindow: NSPanel {
         isReleasedWhenClosed = false
         alphaValue = 0
         
+        
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
-        collectionBehavior.insert(.transient)
+//        collectionBehavior.insert(.transient)
         backgroundColor = .clear
+        
+        
         
         imageView.image = NSImage(systemSymbolName: "opticaldiscdrive.fill", accessibilityDescription: nil)
         imageView.contentTintColor = .systemBlue

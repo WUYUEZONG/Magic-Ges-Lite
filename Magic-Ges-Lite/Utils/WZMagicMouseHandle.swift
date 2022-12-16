@@ -50,7 +50,7 @@ class WZMagicMouseHandle {
     private  var changeToHoldGestureWorkItem: DispatchWorkItem?
     private  var cancelGestureWorkItem: DispatchWorkItem?
     
-    private var mouseOnElement: AXUIElement?
+//    private var mouseOnElement: AXUIElement?
     
 
     
@@ -150,7 +150,8 @@ extension WZMagicMouseHandle {
 
 extension WZMagicMouseHandle {
     
-    func getScrollWheelEventUnderMouseWindow(isOnMenuBar:(()->Void)? = nil, isDockItem:((AXUIElement)->Void)? = nil) -> AXUIElement? {
+    @discardableResult
+    func scrollWheelEventUnderMouse(onMenuBar:(()->Void)? = nil, onDockItem:((AXUIElement)->Void)? = nil, onTitleBar:((AXUIElement)->Void)? = nil) -> AXUIElement? {
         
         let mouseLocationCGPoint = NSEvent.mouseLocation.toCGPoint()
         
@@ -164,13 +165,13 @@ extension WZMagicMouseHandle {
             
 //            openAppAllWindows()
             
-            isOnMenuBar?()
+            onMenuBar?()
             return nil
         }
         
         if pointElement.isDockItem {
-            isDockItem?(pointElement)
-            return nil
+            onDockItem?(pointElement)
+            return pointElement
         }
         
         guard !pointElement.isDesktop else { return nil }
@@ -189,6 +190,7 @@ extension WZMagicMouseHandle {
         // 38 假定的应用导航栏高度
         guard mouseLocationCGPoint.y - topLevelUIElement.frame.minY < 38 else { return nil }
         
+        onTitleBar?(topLevelUIElement)
         return topLevelUIElement
     }
     
@@ -239,7 +241,33 @@ extension WZMagicMouseHandle {
 //
 //    }
     
+    func setupLongActionWorkItem() {
+        self.changeToHoldGestureWorkItem = DispatchWorkItem(block: {
+            
+            debugPrint("执行了changeToHoldGestureWorkItem is main", Thread.isMainThread)
+            
+            if self.gestureEnded  || self.gestureState == .cancel  { return }
+            
+            if let event = self.scrollWhellEvent {
+                self.gestureState = .hold(self.calEvents(event: event))
+                StateWindow.shared.show(self.gestureState, needHide: false)
+            }
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + self.becomeLongActionDelay, execute: self.changeToHoldGestureWorkItem!)
+    }
     
+    func setupCancelWorkItem(_ delayTime: DispatchTime) {
+        self.cancelGestureWorkItem = DispatchWorkItem(block: {
+            debugPrint("执行了cancelGestureWorkItem is main", Thread.isMainThread)
+            if self.gestureEnded || self.gestureState == .cancel { return }
+            
+            self.gestureState = .cancel
+            StateWindow.shared.show(self.gestureState)
+            
+        })
+        DispatchQueue.main.asyncAfter(deadline: delayTime, execute: self.cancelGestureWorkItem!)
+    }
     
     
     func doScrollWheel(event: NSEvent) {
@@ -252,38 +280,21 @@ extension WZMagicMouseHandle {
             self.cancelGestureWorkItem?.cancel()
             self.gestureState = .none
             
-            self.mouseOnElement = getScrollWheelEventUnderMouseWindow()
-            if self.mouseOnElement != nil {
+            scrollWheelEventUnderMouse {
+                
+            } onDockItem: { _ in
+                
+                self.gestureState = .dock(.none)
+                self.setupCancelWorkItem(.now() + 0.5)
+                
+            } onTitleBar: { _ in
                 
                 self.gestureState = .normal(.none)
-                
-                self.changeToHoldGestureWorkItem = DispatchWorkItem(block: {
-                    
-                    debugPrint("执行了changeToHoldGestureWorkItem is main", Thread.isMainThread)
-                    
-                    if self.gestureEnded  || self.gestureState == .cancel  { return }
-                    
-                    if let event = self.scrollWhellEvent {
-                        self.gestureState = .hold(self.calEvents(event: event))
-                        StateWindow.shared.show(self.gestureState, needHide: false)
-                    }
-                })
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.becomeLongActionDelay, execute: self.changeToHoldGestureWorkItem!)
-                
-                
-                self.cancelGestureWorkItem = DispatchWorkItem(block: {
-                    debugPrint("执行了cancelGestureWorkItem is main", Thread.isMainThread)
-                    if self.gestureEnded || self.gestureState == .cancel { return }
-                    
-                    self.gestureState = .cancel
-                    StateWindow.shared.show(self.gestureState)
-                    
-                })
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.getCancelActionDelay(), execute: self.cancelGestureWorkItem!)
-                
+                self.setupLongActionWorkItem()
+                self.setupCancelWorkItem(.now() + self.getCancelActionDelay())
             }
-
+            
+            
             
             scrollWhellEvent = nil
             
@@ -296,28 +307,15 @@ extension WZMagicMouseHandle {
             }
             
             
-            if gestureState == .cancel {
-                StateWindow.shared.hide()
-            } else {
-                
-                if let se = scrollWhellEvent {
-                    
-                    switch self.gestureState {
-                    case .normal:
-                        StateWindow.shared.show(.normal(self.calEvents(event: se)), needHide: false)
-                        
-                        break
-                    case .hold:
-                        StateWindow.shared.show(.hold(self.calEvents(event: se)), needHide: false)
-                        
-                        break
-                    default: break
-                    }
+            switch gestureState {
+            case .normal, .hold:
+                if let se = scrollWhellEvent, let action = gestureState.reset(calEvents(event: se)) {
+                    StateWindow.shared.show(action, needHide: false)
                 }
-                
+            default:
+                StateWindow.shared.hide()
+                break
             }
-            
-            
             
             break
         case .ended:
@@ -343,24 +341,27 @@ extension WZMagicMouseHandle {
         }
         
         
-        if let action = action, let element = getScrollWheelEventUnderMouseWindow(isOnMenuBar: {
+        if let action = action {
             
-            // 菜单栏的动作
-            
-            
-        }, isDockItem: { dockItem in
-            
-            // dock栏的动作
-            dockItem.performDockAction(action)
-            
-        }) {
-            
-            element.performAction(action)
-            
+            scrollWheelEventUnderMouse {
+                
+                // 菜单栏的动作
+                
+            } onDockItem: { dockItem in
+                // dock栏的动作
+                dockItem.performDockAction(action)
+                
+            } onTitleBar: { titleBar in
+                // 标题栏
+                titleBar.performAction(action)
+//                NSRunningApplication.current.perform(Selector("performClose:"))
+            }
+        } else {
+            StateWindow.shared.hide(immediately: true)
         }
         
         self.scrollWhellEvent = nil
-        self.mouseOnElement = nil
+        
     }
     
     

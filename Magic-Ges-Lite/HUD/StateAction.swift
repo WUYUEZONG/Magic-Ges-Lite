@@ -52,17 +52,20 @@ enum StateAction: Equatable {
     case none
     case normal(_ direct: Direction = .none)
     case hold(_ direct: Direction = .none)
+    case dock(_ direct: Direction = .none)
     case exitFullScreen
     case cancel
     
     
-    func reset(_ direction: Direction) -> StateAction {
+    func reset(_ direction: Direction) -> StateAction? {
         switch self {
         case .normal:
             return .normal(direction)
         case .hold:
             return .hold(direction)
-        default: return self
+        case .dock:
+            return .dock(direction)
+        default: return nil
         }
     }
     
@@ -157,8 +160,14 @@ extension AXUIElement {
     
     func performDockAction(_ action: StateAction) {
         switch action {
-        case .normal(.down):
-            showExpose()
+        case let .dock(d):
+            switch d {
+            case .down:
+                showExpose()
+                break
+            default: break
+            }
+            
             break
         default: break
         }

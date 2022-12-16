@@ -15,7 +15,7 @@ class ContentWindow: NSPanel {
     init() {
         
         
-        super.init(contentRect: CGRect(x: 0, y: 0, width: 700, height: 450), styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
+        super.init(contentRect: CGRect(x: 0, y: 0, width: 700, height: 450), styleMask: [.titled, .closable], backing: .buffered, defer: false)
         
         
 //        title = "MG"
@@ -24,6 +24,8 @@ class ContentWindow: NSPanel {
         isReleasedWhenClosed = false
 
         collectionBehavior.insert(.transient)
+        collectionBehavior.insert(.ignoresCycle)
+        
         
         contentView = NSHostingView(rootView: ContentView())
         center()
