@@ -9,6 +9,8 @@ import AppKit
 
 enum StateAction: Equatable {
     
+    
+    
     enum Direction {
         case up
         case down
@@ -53,6 +55,16 @@ enum StateAction: Equatable {
     case exitFullScreen
     case cancel
     
+    
+    func reset(_ direction: Direction) -> StateAction {
+        switch self {
+        case .normal:
+            return .normal(direction)
+        case .hold:
+            return .hold(direction)
+        default: return self
+        }
+    }
     
     
     var imageName: String {
@@ -138,4 +150,79 @@ enum StateAction: Equatable {
         
     }
     
+}
+
+
+extension AXUIElement {
+    
+    func performDockAction(_ action: StateAction) {
+        switch action {
+        case .normal(.down):
+            showExpose()
+            break
+        default: break
+        }
+    }
+    
+    
+    func performAction(_ action: StateAction) {
+        
+        // HUD
+        switch action {
+        case .none:
+            StateWindow.shared.hide(immediately: true)
+            return
+            
+        default:
+            StateWindow.shared.show(action)
+        }
+        
+        if let delegate = NSApplication.shared.delegate as? AppDelegate {
+            delegate.countGesture()
+        }
+        
+        switch action {
+            
+        case let .normal(direction):
+            
+            switch direction {
+            case .up, .left, .right:
+                
+                setNewFrame(action: action)
+                
+            case .down:
+                
+                setValue(.minimized, true as CFBoolean)
+                
+            default: break
+            }
+            
+        case let .hold(direction):
+            
+            switch direction {
+            case .up:
+                
+                pressButton(.fullScreenButton) { _, _ in
+                    self.setValue(.fullScreen, false)
+                }
+                
+            case .left, .right:
+                
+                setNewFrame(action: action)
+                
+            case .down:
+                
+                pressButton(.closeButton) { _, _ in
+                    
+                }
+                
+                break
+            default: break
+            }
+            
+        default: break
+        }
+        
+        
+    }
 }

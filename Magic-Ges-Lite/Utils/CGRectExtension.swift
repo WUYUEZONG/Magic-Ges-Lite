@@ -9,11 +9,27 @@ import Foundation
 import AppKit
 
 extension NSPoint {
-    func toCGPoint() -> NSPoint {
-        if let main = NSScreen.main {
-            return NSPoint(x: x, y: main.frame.height - y)
+    func toCGPoint() -> CGPoint {
+//        if let main = NSScreen.main {
+//            return NSPoint(x: x, y: main.frame.height - y)
+//        }
+//        return NSPoint(x: self.x, y: 1080 - self.y)
+        
+        var foundScreen: NSScreen?
+        var point: CGPoint = .zero
+        
+        NSScreen.screens.forEach { screen in
+            if NSPointInRect(self, screen.frame) {
+                foundScreen = screen
+            }
         }
-        return NSPoint(x: self.x, y: 1080 - self.y)
+        
+        if foundScreen != nil {
+            let screenHeight = foundScreen!.frame.size.height
+            point = CGPointMake(self.x, screenHeight - y - 1)
+        }
+        return point
+        
     }
 }
 

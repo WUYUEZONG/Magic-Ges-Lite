@@ -127,6 +127,17 @@ extension AXUIElement {
         return role as? NSAccessibility.Role
     }
     
+    func subrole() -> NSAccessibility.Subrole? {
+        guard let subrole = getValue(.subrole) else { return nil }
+        return subrole as? NSAccessibility.Subrole
+    }
+    
+    func topLevelUIElement() -> AXUIElement? {
+        guard let top = getValue(.topLevelUIElement) else { return nil }
+        let e = top as! AXUIElement
+        return e
+    }
+    
     var isApplicaation: Bool {
         role() == .application
     }
@@ -142,9 +153,101 @@ extension AXUIElement {
         return false
     }
     
+    
+    var description: String {
+        let description = getValue(.description) as? String
+        return description ?? ""
+    }
+    
+    var frame: CGRect {
+        if let rect = getValue(.frame) {
+            let frame: CGRect = (rect as! AXValue).toValue() ?? .zero
+            return frame
+        }
+        return .zero
+    }
+    
+}
+
+extension AXUIElement {
+    
+    var isDockItem: Bool {
+        role() == .dockItem && subrole() == .applicationDockItem
+    }
+    
+    var isMenuBar: Bool {
+        role() == .menuBar
+    }
+    
+    var isDesktop: Bool {
+        let desktopDescription = description == "桌面" || description == "Desktop"
+        let frame = NSScreen.screens[0].frame.equalTo(self.frame)
+        return desktopDescription && frame
+        
+    }
+    
+    func performAction(_ action: NSAccessibility.Action) {
+        let actionError = AXUIElementPerformAction(self, action.rawValue as CFString)
+        if actionError != .success {
+            debugPrint("actionError", actionError.rawValue)
+        }
+    }
+    
+    func showExpose() {
+        performAction(.showExpose)
+    }
+    
+    func setNewFrame(action: StateAction) {
+        
+        guard let frame = action.frame else { return }
+        
+        guard !self.frame.equalTo(frame) else {
+            debugPrint("无需操作")
+            return
+        }
+        
+        var origin = frame.origin
+        if let setOrigin = AXValueCreate(.cgPoint, &origin) {
+            setValue(.position, setOrigin)
+            
+        }
+        
+        var size = frame.size
+        if let setSize = AXValueCreate(.cgSize, &size) {
+            setValue(.size, setSize)
+        }
+    }
+    
+    func pressButton(_ button: NSAccessibility.Attribute, disable:((_ window: AXUIElement, _ button: AXUIElement) -> Void)?) {
+        
+        if let btn = getValue(button) {
+            let btn = btn as! AXUIElement
+            if let enable = btn.getValue(.enabled) as? Bool, enable {
+                btn.performAction(.press)
+            } else {
+                disable?(self, btn)
+            }
+        }
+
+    }
+    
 }
 
 extension NSAccessibility.Attribute {
     static let fullScreen = NSAccessibility.Attribute(rawValue: "AXFullScreen")
     static let frame = NSAccessibility.Attribute(rawValue: "AXFrame")
+    
+}
+
+extension NSAccessibility.Action {
+    static let showExpose = NSAccessibility.Action(rawValue: "AXShowExpose")
+}
+
+
+extension NSAccessibility.Role {
+    static let dockItem = NSAccessibility.Role(rawValue: "AXDockItem")
+}
+
+extension NSAccessibility.Subrole {
+    static let applicationDockItem = NSAccessibility.Subrole(rawValue: "AXApplicationDockItem")
 }

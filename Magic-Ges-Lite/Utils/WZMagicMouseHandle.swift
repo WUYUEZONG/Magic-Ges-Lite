@@ -12,7 +12,7 @@ import SwiftUI
 
 class WZMagicMouseHandle {
     
-    private var state: StateWindow
+//    private var state: StateWindow
     
     var running: Bool { eventMonitor != nil }
     
@@ -50,15 +50,12 @@ class WZMagicMouseHandle {
     private  var changeToHoldGestureWorkItem: DispatchWorkItem?
     private  var cancelGestureWorkItem: DispatchWorkItem?
     
-    private var focusedWindow: WindowInfo?
+    private var mouseOnElement: AXUIElement?
     
-//    var hud: NSWindowController?
+
     
     init() {
         
-        
-        state = StateWindow()
-//
         
     }
     
@@ -81,6 +78,7 @@ class WZMagicMouseHandle {
             case .scrollWheel:
 //                isDirectionInvertedFromDevice
                 self.doScrollWheel(event: event)
+                
                 break
             default:
                 debugPrint(event.description)
@@ -152,147 +150,99 @@ extension WZMagicMouseHandle {
 
 extension WZMagicMouseHandle {
     
-    
-    func getScrollWheelEventUnderMouseWindow(event: NSEvent) -> WindowInfo? {
+    func getScrollWheelEventUnderMouseWindow(isOnMenuBar:(()->Void)? = nil, isDockItem:((AXUIElement)->Void)? = nil) -> AXUIElement? {
         
-//        guard let main = NSScreen.main else { return nil }
+        let mouseLocationCGPoint = NSEvent.mouseLocation.toCGPoint()
         
-        let mouseLocation = event.locationInWindow
-//        let statusY = main.visibleFrame.maxY
-//        let dockY = main.visibleFrame.minY
+        var pointElement: AXUIElement?
         
-        let screenWindows = WindowUtil.getOnScreenWindows()
-        let current = screenWindows[event.windowNumber]
-        debugPrint(screenWindows)
-        debugPrint("\(event.windowNumber)")
-        guard var current = current,
-              current.frame.contains(mouseLocation.toCGPoint()) else { return nil }
+        guard AXUIElementCopyElementAtPosition(AXUIElementCreateSystemWide(), Float(mouseLocationCGPoint.x), Float(mouseLocationCGPoint.y), &pointElement) == .success else { return nil }
         
-        // 38 假定的应用导航栏高度
-        guard mouseLocation.toCGPoint().y - current.frame.minY < 38 else { return nil }
+        guard let pointElement = pointElement else { return nil }
         
-        let application = AXUIElementCreateApplication(current.pid)
-        
-        let element = UnsafeMutablePointer<AXUIElement?>.allocate(capacity: 1)
-        let copyError = AXUIElementCopyElementAtPosition(application, Float(mouseLocation.toCGPoint().x), Float(mouseLocation.toCGPoint().y), element)
-        if copyError == .success {
+        if pointElement.isMenuBar {
             
-            guard let elementAtPosition = element.pointee else { return nil }
+//            openAppAllWindows()
             
-            if elementAtPosition.isWindow {
-                current.element = elementAtPosition
-                debugPrint(elementAtPosition.getValue(.frame).debugDescription)
-            } else {
-                guard let eleWindow = elementAtPosition.getValue(.window) else { return nil }
-                let ew = eleWindow as! AXUIElement
-                current.element = ew
-                debugPrint(ew.getValue(.frame).debugDescription)
-            }
-            
-            return current
-        } else {
-            debugPrint("AXUIElementCopyElementAtPosition", copyError.rawValue)
-//            /System/Applications/Mission Control.app
-//            openMissionControlApp()
-            openAppAllWindows()
+            isOnMenuBar?()
             return nil
         }
         
-//        guard let elements = application.getValue(.windows) else { return nil }
+        if pointElement.isDockItem {
+            isDockItem?(pointElement)
+            return nil
+        }
+        
+        guard !pointElement.isDesktop else { return nil }
+        
+        var topLevelUIElement = pointElement.topLevelUIElement()
+        if topLevelUIElement == nil {
+            if pointElement.isWindow {
+                topLevelUIElement = pointElement
+            } else {
+                return nil
+            }
+        }
+        
+        guard let topLevelUIElement = topLevelUIElement else { return nil }
+        
+        // 38 假定的应用导航栏高度
+        guard mouseLocationCGPoint.y - topLevelUIElement.frame.minY < 38 else { return nil }
+        
+        return topLevelUIElement
+    }
+    
+//    func getScrollWheelEventUnderMouseWindow(event: NSEvent) -> WindowInfo? {
 //
-//        guard let lists = elements as? [AXUIElement] else  { return nil }
+////        guard let main = NSScreen.main else { return nil }
 //
-//        let windowElement = lists.first {
-//            if let names = $0.attributeNames(), names.contains(NSAccessibility.Attribute.frame.rawValue) {
-//                if let value = $0.getValue(.frame) {
-//                    let value = value as! AXValue
-////                    kAXValueCGRectType
+//        let mouseLocation = event.locationInWindow
+////        let statusY = main.visibleFrame.maxY
+////        let dockY = main.visibleFrame.minY
 //
-//                    if let frame: CGRect = value.toValue() {
-//                        let loc = mouseLocation.toCGPoint()
-//                        let inX = loc.x > frame.minX && loc.x < frame.maxX
-//                        let inY = loc.y - frame.minY < 38
-//                        let inFrame = inY && inX
-//                        return frame.equalTo(current.frame) || inFrame
-//                    }
+//        let screenWindows = WindowUtil.getOnScreenWindows()
+//        let current = screenWindows[event.windowNumber]
+//        debugPrint(screenWindows)
+//        debugPrint("\(event.windowNumber)")
+//        guard var current = current,
+//              current.frame.contains(mouseLocation.toCGPoint()) else { return nil }
 //
+//        // 38 假定的应用导航栏高度
+//        guard mouseLocation.toCGPoint().y - current.frame.minY < 38 else { return nil }
 //
-//                }
+//        let application = AXUIElementCreateApplication(current.pid)
+//
+//        let element = UnsafeMutablePointer<AXUIElement?>.allocate(capacity: 1)
+//        let copyError = AXUIElementCopyElementAtPosition(application, Float(mouseLocation.toCGPoint().x), Float(mouseLocation.toCGPoint().y), element)
+//        if copyError == .success {
+//
+//            guard let elementAtPosition = element.pointee else { return nil }
+//
+//            if elementAtPosition.isWindow {
+//                current.element = elementAtPosition
+//                debugPrint(elementAtPosition.getValue(.frame).debugDescription)
+//            } else {
+//                guard let eleWindow = elementAtPosition.getValue(.window) else { return nil }
+//                let ew = eleWindow as! AXUIElement
+//                current.element = ew
+//                debugPrint(ew.getValue(.frame).debugDescription)
 //            }
-//            return false
+//
+//            return current
+//        } else {
+//            debugPrint("AXUIElementCopyElementAtPosition", copyError.rawValue)
+////            /System/Applications/Mission Control.app
+////            openMissionControlApp()
+////            openAppAllWindows()
+//            return nil
 //        }
 //
-//        current.element = windowElement
-//        return current
-    }
+//    }
     
-    
-    func setNewFrame(action: StateAction,  for event: NSEvent) {
-        
-        guard let frame = action.frame else { return }
-        
-        guard let focusedWindow = focusedWindow, let element = focusedWindow.element else { return }
-        
-        guard !focusedWindow.frame.equalTo(frame) else {
-            debugPrint("无需操作")
-            return
-        }
-        
-        var origin = frame.origin
-        if let setOrigin = AXValueCreate(.cgPoint, &origin) {
-            self.setAttributeFor(element: element, attribute: .position, value: setOrigin)
-        }
-        
-        var size = frame.size
-        if let setSize = AXValueCreate(.cgSize, &size) {
-            self.setAttributeFor(element: element, attribute: .size, value: setSize)
-        }
-    }
     
     
     
     func doScrollWheel(event: NSEvent) {
-        
-        doScrollWhell(event: event) { action, e in
-            
-            self.countGesture()
-            
-            switch action {
-                
-            case let .normal(direction):
-                
-                switch direction {
-                case .up, .left, .right:
-                    self.setNewFrame(action: action, for: e)
-                case .down:
-                    if let focusedWindow = self.focusedWindow, let ele = focusedWindow.element {
-                        self.setAttributeFor(element: ele, attribute: .minimized, value: true as CFBoolean)
-                    }
-                default: break
-                }
-                
-            case let .hold(direction):
-                
-                switch direction {
-                case .up:
-                    self.pressFullScreenButton(event: e)
-                case .left, .right:
-                    self.setNewFrame(action: action, for: e)
-                case .down:
-                    self.pressCloseButton(event: e)
-                    break
-                default: break
-                }
-                
-            default: break
-            }
-        }
-        
-        
-    }
-    
-    
-    func doScrollWhell(event: NSEvent, complete: ((StateAction, NSEvent) -> Void)?) {
         
         switch event.phase {
         case .began, .mayBegin:
@@ -302,8 +252,8 @@ extension WZMagicMouseHandle {
             self.cancelGestureWorkItem?.cancel()
             self.gestureState = .none
             
-            focusedWindow = getScrollWheelEventUnderMouseWindow(event: event)
-            if let focusedWindow = focusedWindow, focusedWindow.element != nil {
+            self.mouseOnElement = getScrollWheelEventUnderMouseWindow()
+            if self.mouseOnElement != nil {
                 
                 self.gestureState = .normal(.none)
                 
@@ -314,8 +264,8 @@ extension WZMagicMouseHandle {
                     if self.gestureEnded  || self.gestureState == .cancel  { return }
                     
                     if let event = self.scrollWhellEvent {
-                        self.gestureState = .hold(self.calEvents(event: event).direction)
-                        self.state.show(self.gestureState, needHide: false)
+                        self.gestureState = .hold(self.calEvents(event: event))
+                        StateWindow.shared.show(self.gestureState, needHide: false)
                     }
                 })
                 
@@ -327,7 +277,7 @@ extension WZMagicMouseHandle {
                     if self.gestureEnded || self.gestureState == .cancel { return }
                     
                     self.gestureState = .cancel
-                    self.state.show(self.gestureState)
+                    StateWindow.shared.show(self.gestureState)
                     
                 })
                 DispatchQueue.main.asyncAfter(deadline: .now() + self.getCancelActionDelay(), execute: self.cancelGestureWorkItem!)
@@ -340,31 +290,29 @@ extension WZMagicMouseHandle {
             break
         case .changed:
             
-            
-            if scrollWhellEvent == nil {
-                scrollWhellEvent = event
-            }
-            
-            if event.deltaX != 0 || event.deltaY != 0 {
+            let deltaAllowValue = sensitivity
+            if abs(event.deltaX) > deltaAllowValue || abs(event.deltaY) > deltaAllowValue {
                 scrollWhellEvent = event
             }
             
             
             if gestureState == .cancel {
-                self.state.hide()
+                StateWindow.shared.hide()
             } else {
                 
-                switch self.gestureState {
-                case .normal:
-                    self.gestureState = .normal(self.calEvents(event: scrollWhellEvent!).direction)
-                    self.state.show(self.gestureState, needHide: false)
+                if let se = scrollWhellEvent {
                     
-                    break
-                case .hold:
-                    self.gestureState = .hold(self.calEvents(event: scrollWhellEvent!).direction)
-                    self.state.show(self.gestureState, needHide: false)
-                    break
-                default: break
+                    switch self.gestureState {
+                    case .normal:
+                        StateWindow.shared.show(.normal(self.calEvents(event: se)), needHide: false)
+                        
+                        break
+                    case .hold:
+                        StateWindow.shared.show(.hold(self.calEvents(event: se)), needHide: false)
+                        
+                        break
+                    default: break
+                    }
                 }
                 
             }
@@ -374,98 +322,71 @@ extension WZMagicMouseHandle {
             break
         case .ended:
             
-            self.gestureEnded = true
-            self.changeToHoldGestureWorkItem?.cancel()
-            self.cancelGestureWorkItem?.cancel()
-            
-            guard let focusedWindow = focusedWindow, focusedWindow.element != nil else { return }
-            
-            guard let scrollWhellEvent = scrollWhellEvent else { return }
-            
-            let shouldPreformGesture = abs(scrollWhellEvent.deltaX) > sensitivity || abs(scrollWhellEvent.deltaY) > sensitivity
-            
-            let result = self.calEvents(event: scrollWhellEvent)
-            switch self.gestureState {
-            case .normal:
-                
-                if shouldPreformGesture {
-                    self.gestureState = .normal(result.direction)
-                    self.state.show(self.gestureState)
-                    complete?(self.gestureState, result.event)
-                } else {
-                    self.state.show(.cancel)
-                }
-                
-                
-                break
-            case .hold:
-                
-                if shouldPreformGesture {
-                    self.gestureState = .hold(result.direction)
-                    self.state.show(self.gestureState)
-                    complete?(self.gestureState, result.event)
-                } else {
-                    self.state.show(.cancel)
-                }
-                
-                break
-            default:
-                self.state.hide()
-                break
-            }
-            
-            if !shouldPreformGesture {
-                
-                debugPrint("不符合要求的手势")
-            }
-            
-            
-            self.scrollWhellEvent = nil
-            
+            eventEnded()
+            break
             
         default: break
         }
         
     }
     
-    func countGesture() {
-        if let delegate = NSApplication.shared.delegate as? AppDelegate {
-            delegate.gestureCounting += 1
-            delegate.countingGestureItem.title = .gestureCounting(delegate.gestureCounting)
+    func eventEnded() {
+        self.gestureEnded = true
+        self.changeToHoldGestureWorkItem?.cancel()
+        self.cancelGestureWorkItem?.cancel()
+        
+        var action: StateAction?
+        
+        if let scrollWhellEvent = scrollWhellEvent {
+            let direction = self.calEvents(event: scrollWhellEvent)
+            action = self.gestureState.reset(direction)
         }
+        
+        
+        if let action = action, let element = getScrollWheelEventUnderMouseWindow(isOnMenuBar: {
+            
+            // 菜单栏的动作
+            
+            
+        }, isDockItem: { dockItem in
+            
+            // dock栏的动作
+            dockItem.performDockAction(action)
+            
+        }) {
+            
+            element.performAction(action)
+            
+        }
+        
+        self.scrollWhellEvent = nil
+        self.mouseOnElement = nil
     }
     
-    func calEvents(event: NSEvent) -> (direction: StateAction.Direction, event: NSEvent) {
+    
+    
+    func calEvents(event: NSEvent) -> StateAction.Direction {
         if abs(event.deltaX) > abs(event.deltaY) {
             // 水平操作
-            
-            if event.deltaX < 0 {
-                
-                return (.left, event)
-                
-            } else {
-                
-                return (.right, event)
-                
-                
-            }
+            return event.deltaX < 0 ? .left : .right
             
         } else {
+            
             if event.deltaY < 0 {
                 
                 if event.isDirectionInvertedFromDevice {
-                    return (.up, event)
+                    return .up
                 } else {
-                    return (.down, event)
+                    return .down
                 }
                 
                 
             } else {
                 
                 if event.isDirectionInvertedFromDevice {
-                    return (.down, event)
+                    return .down
                 } else {
-                    return (.up, event)
+                    return .up
                 }
             }
         }
@@ -477,106 +398,16 @@ extension WZMagicMouseHandle {
 
 extension WZMagicMouseHandle {
     
-    func openAppAllWindows() {
-        guard let menuBarOwningApplication = NSWorkspace.shared.menuBarOwningApplication else {
-            return
-        }
-        if menuBarOwningApplication.activate(options: .activateAllWindows) {
-            debugPrint("activateAllWindows")
-        }
-        NSWorkspace.shared.hideOtherApplications()
-        
-//        if let appUrl = NSWorkspace.shared.urlForApplication(withBundleIdentifier: menuBarOwningApplication.bundleIdentifier!) {
-//            let config = NSWorkspace.OpenConfiguration()
-//            config.activates = true
-//            NSWorkspace.shared.open(appUrl, configuration: config)
-//        }
-        
-        
-    }
     
     func openMissionControlApp() {
-//        NSWorkspace.shared.open(<#T##url: URL##URL#>)
-        if let expose = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.exposelauncher") {
-            if NSWorkspace.shared.open(expose) {
-                
-            }
-        }
-    }
-    
-    func setAttributeFor(element: AXUIElement, attribute: NSAccessibility.Attribute, value: AnyObject) {
-  
-        guard let names = element.attributeNames() else {
-            return
-        }
-        
-        if names.contains(attribute.rawValue) {
-            element.setValue(attribute, value)
-        }
-        
-    }
-    
-    func pressButton(event: NSEvent, button: NSAccessibility.Attribute, disable:((_ window: AXUIElement, _ button: AXUIElement) -> Void)?) {
-        
-        if let focusedWindow = focusedWindow, let element = focusedWindow.element {
-            
-            
-            //                AXFocused,
-            //                AXFullScreen,
-            //                AXTitle,
-            //                AXChildrenInNavigationOrder,
-            //                AXFrame,
-            //                AXPosition,
-            //                AXGrowArea,
-            //                AXMinimizeButton,
-            //                AXDocument,
-            //                AXSections,
-            //                AXCloseButton,
-            //                AXMain,
-            //                AXActivationPoint,
-            //                AXFullScreenButton,
-            //                AXProxy,
-            //                AXDefaultButton,
-            //                AXMinimized,
-            //                AXChildren,
-            //                AXRole,
-            //                AXParent,
-            //                AXTitleUIElement,
-            //                AXCancelButton,
-            //                AXModal,
-            //                AXSubrole,
-            //                AXZoomButton,
-            //                AXRoleDescription,
-            //                AXSize,
-            //                AXToolbarButton,
-            //                AXIdentifier
-            
-            if let btn = element.getValue(button) {
-                
-                let btn = btn as! AXUIElement
-                if let enable = btn.getValue(.enabled) as? Bool, enable {
-                    AXUIElementPerformAction(btn, NSAccessibility.Action.press as CFString)
-                } else {
-                    disable?(element, btn)
-                }
-            }
-        }
 
-    }
-    
-    func pressFullScreenButton(event: NSEvent) {
-        pressButton(event: event, button: .fullScreenButton) { w, e in
-            if let attributes = w.attributeNames(), attributes.contains(NSAccessibility.Attribute.fullScreen.rawValue) {
-                w.setValue(.fullScreen, false)
-            }
-        }
-    }
-    
-    func pressCloseButton(event: NSEvent) {
-        pressButton(event: event, button: .closeButton) { _, _ in
+        if let expose = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.exposelauncher") {
+//            com.apple.dt.Xcode
+            NSWorkspace.shared.open(expose)
             
         }
     }
+    
     
     
 }

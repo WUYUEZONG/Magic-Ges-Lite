@@ -11,15 +11,20 @@ import SwiftUI
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    func countGesture() {
+        gestureCounting += 1
+        countingGestureItem.title = .gestureCounting(gestureCounting)
+    }
+    
     @AppStorage(UserDefaults.UserKey.gestureCount.rawValue) var gestureCounting = 0
 
-    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-    let menu = NSMenu()
+    private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    private let menu = NSMenu()
 
-    let content = ContentWindow()
+    private let content = ContentWindow()
     
-    var toggleGestureItem = NSMenuItem()
-    var countingGestureItem = NSMenuItem()
+    private var toggleGestureItem = NSMenuItem()
+    private var countingGestureItem = NSMenuItem()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application

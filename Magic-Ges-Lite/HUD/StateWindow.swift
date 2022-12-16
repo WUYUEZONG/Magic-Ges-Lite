@@ -13,6 +13,8 @@ class StateWindow: NSPanel {
     
     @AppStorage(UserDefaults.UserKey.stateHudByMouse.rawValue) static var stateHudByMouse = false
     
+    static var shared = StateWindow()
+    
     private let imageView = NSImageView()
     
     private let action = StateAction.none
